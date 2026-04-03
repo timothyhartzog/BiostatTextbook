@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 3 – Descriptive Statistics</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 3</li>
+        <li>Descriptive Statistics</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 3</div>
+        <h1>Descriptive Statistics</h1>
+        <p>Summarise and explore data using measures of centre, spread, and shape before applying any formal tests.</p>
+      </div>
+
+      <!-- 3.1 -->
+      <section class="section">
+        <h2>3.1 Measures of Central Tendency</h2>
+        <p>These statistics describe where the "middle" of a dataset lies.</p>
+
+        <h3>Mean</h3>
+        <p>The arithmetic average. Sum all values and divide by the number of observations.</p>
+        <div class="formula">x̄ = (Σ xᵢ) / n</div>
+        <p>The mean uses every value, making it sensitive to outliers. Best for <strong>symmetric, continuous</strong> data.</p>
+
+        <h3>Median</h3>
+        <p>The middle value when data are sorted. <strong>Robust to outliers</strong>. Preferred for skewed data (e.g., income, hospital length of stay).</p>
+
+        <h3>Mode</h3>
+        <p>The most frequently occurring value. Useful for categorical data; a dataset can be unimodal, bimodal, or multimodal.</p>
+
+        <div class="callout callout-info">
+          <strong>💡 Choosing the Right Measure</strong>
+          Use the <em>mean</em> for symmetric distributions; use the <em>median</em> for skewed distributions or when outliers are present.
+        </div>
+      </section>
+
+      <!-- 3.2 -->
+      <section class="section">
+        <h2>3.2 Measures of Spread (Variability)</h2>
+
+        <h3>Range</h3>
+        <p>Maximum − Minimum. Simple but sensitive to extremes.</p>
+
+        <h3>Interquartile Range (IQR)</h3>
+        <p>The distance between the 25th percentile (Q1) and the 75th percentile (Q3). Contains the middle 50% of data and is robust to outliers.</p>
+        <div class="formula">IQR = Q3 − Q1</div>
+
+        <h3>Variance (s²)</h3>
+        <p>Average squared deviation from the mean (using n − 1 for a sample).</p>
+        <div class="formula">s² = Σ(xᵢ − x̄)² / (n − 1)</div>
+
+        <h3>Standard Deviation (s)</h3>
+        <p>Square root of the variance; expressed in the same units as the data. The most commonly used measure of spread for normally distributed data.</p>
+        <div class="formula">s = √[Σ(xᵢ − x̄)² / (n − 1)]</div>
+
+        <h3>Standard Error of the Mean (SEM)</h3>
+        <p>How much the sample mean is expected to vary from sample to sample.</p>
+        <div class="formula">SEM = s / √n</div>
+      </section>
+
+      <!-- 3.3 -->
+      <section class="section">
+        <h2>3.3 Shape: Skewness and Kurtosis</h2>
+        <p><strong>Skewness</strong> measures asymmetry:</p>
+        <ul>
+          <li><strong>Right (positive) skew:</strong> Long tail to the right; mean &gt; median. Common for income, hospital stays.</li>
+          <li><strong>Left (negative) skew:</strong> Long tail to the left; mean &lt; median.</li>
+          <li><strong>Symmetric:</strong> Mean ≈ median (e.g., normal distribution).</li>
+        </ul>
+        <p><strong>Kurtosis</strong> measures the heaviness of tails relative to a normal distribution. High kurtosis (leptokurtic) means more extreme outliers.</p>
+      </section>
+
+      <!-- 3.4 – Interactive Calculator -->
+      <section class="section">
+        <h2>3.4 Interactive Descriptive Statistics Calculator</h2>
+        <p>Enter your data (separated by spaces or commas) and see instant summary statistics and a histogram.</p>
+
+        <div class="widget">
+          <div class="widget-title">🧮 Descriptive Statistics Calculator</div>
+
+          <div class="form-group">
+            <label for="dataInput">Data values</label>
+            <textarea id="dataInput" class="form-control" rows="3" placeholder="Example: 72 85 91 68 77 88 95 64 79 83"></textarea>
+          </div>
+
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+            <button class="btn btn-primary" id="calcBtn">Calculate</button>
+            <button class="btn btn-outline btn-sm" id="loadExample">Load Example</button>
+          </div>
+
+          <div id="statsOutput" style="display:none">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-top:1.25rem" id="statsGrid"></div>
+            <div class="chart-container" style="margin-top:1.5rem;max-width:600px">
+              <canvas id="histChart"></canvas>
+            </div>
+          </div>
+          <div id="calcError" class="callout callout-danger" style="display:none;margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 3.5 Quiz -->
+      <section class="section">
+        <h2>3.5 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+
+          <div id="q1">
+            <p><strong>Q1.</strong> Hospital length-of-stay data are highly right-skewed. Which measure of central tendency is most appropriate to report?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> Mean</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> Median</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> Mode</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> Variance</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q2">
+            <p><strong>Q2.</strong> The dataset {2, 4, 4, 6, 6, 6, 8} has mean = 5.14. What is the median?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> 4</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> 5</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> 6</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> 5.14</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q3">
+            <p><strong>Q3.</strong> Which statistic captures variability while being robust to outliers?</p>
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> Standard deviation</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> Variance</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="c"> IQR</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="d"> Range</label>
+            <div class="quiz-feedback" id="q3-fb"></div>
+          </div>
+
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter2.html">← Chapter 2: Types of Variables</a>
+        <a href="chapter4.html">Chapter 4: Probability →</a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Interactive Biostatistics Textbook &bull; Chapter 3</p>
+  </footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  const EXAMPLE = '68 72 74 75 77 78 79 80 81 82 83 84 85 86 87 89 91 92 95 110';
+  document.getElementById('loadExample').addEventListener('click', () => {
+    document.getElementById('dataInput').value = EXAMPLE;
+  });
+
+  let histChart = null;
+
+  document.getElementById('calcBtn').addEventListener('click', () => {
+    const raw = document.getElementById('dataInput').value.trim();
+    const err = document.getElementById('calcError');
+    const out = document.getElementById('statsOutput');
+    err.style.display = 'none';
+    out.style.display  = 'none';
+
+    const data = Stats.parseNumbers(raw);
+    if (data.length < 2) {
+      err.textContent = 'Please enter at least 2 numeric values.';
+      err.style.display = 'block';
+      return;
+    }
+
+    const m   = Stats.mean(data);
+    const med = Stats.median(data);
+    const modes = Stats.mode(data);
+    const s   = Stats.sd(data);
+    const v   = Stats.variance(data);
+    const r   = Stats.range(data);
+    const q   = Stats.iqr(data);
+    const sem = Stats.sem(data);
+    const mn  = Math.min(...data), mx = Math.max(...data);
+
+    const stats = [
+      { label:'n',       val: data.length, unit:'' },
+      { label:'Min',     val: Stats.round(mn,2), unit:'' },
+      { label:'Max',     val: Stats.round(mx,2), unit:'' },
+      { label:'Mean',    val: Stats.round(m,3), unit:'' },
+      { label:'Median',  val: Stats.round(med,3), unit:'' },
+      { label:'Mode',    val: modes.length ? modes.join(', ') : 'None', unit:'' },
+      { label:'Range',   val: Stats.round(r,3), unit:'' },
+      { label:'Std Dev', val: Stats.round(s,3), unit:'' },
+      { label:'Variance',val: Stats.round(v,3), unit:'' },
+      { label:'IQR',     val: Stats.round(q.iqr,3), unit:'' },
+      { label:'Q1',      val: Stats.round(q.q1,3), unit:'' },
+      { label:'Q3',      val: Stats.round(q.q3,3), unit:'' },
+      { label:'SEM',     val: Stats.round(sem,4), unit:'' },
+    ];
+
+    const grid = document.getElementById('statsGrid');
+    grid.innerHTML = stats.map(s => `
+      <div style="background:#f5f8fc;border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;text-align:center">
+        <div style="font-size:.75rem;text-transform:uppercase;color:var(--muted);font-weight:700;letter-spacing:.05em">${s.label}</div>
+        <div style="font-size:1.3rem;font-weight:700;color:var(--primary);margin-top:.2rem">${s.val}</div>
+      </div>`).join('');
+
+    // Histogram
+    const bins = 10;
+    const binW = (mx - mn) / bins || 1;
+    const counts = Array(bins).fill(0);
+    const labels = [];
+    for (let i = 0; i < bins; i++) {
+      const lo = mn + i * binW, hi = lo + binW;
+      labels.push(`${Stats.round(lo,1)}–${Stats.round(hi,1)}`);
+      data.forEach(v => { if (v >= lo && (v < hi || (i === bins-1 && v === hi))) counts[i]++; });
+    }
+
+    if (histChart) histChart.destroy();
+    histChart = new Chart(document.getElementById('histChart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Frequency',
+          data: counts,
+          backgroundColor: 'rgba(26,92,118,.7)',
+          borderColor: 'rgba(26,92,118,1)',
+          borderWidth: 1,
+          borderRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false }, title: { display: true, text: 'Histogram' } },
+        scales: {
+          x: { title: { display: true, text: 'Value' }, ticks: { maxRotation: 45 } },
+          y: { title: { display: true, text: 'Frequency' }, beginAtZero: true }
+        }
+      }
+    });
+
+    out.style.display = 'block';
+  });
+
+  /* Quiz */
+  const answers = { q1:'b', q2:'c', q3:'c' };
+  const exp = {
+    q1:'✅ Correct! For skewed data the <strong>median</strong> is robust and more representative than the mean.',
+    q2:'✅ Correct! Sorted: 2,4,4,6,6,6,8. The middle (4th) value is <strong>6</strong>.',
+    q3:'✅ Correct! The <strong>IQR</strong> ignores the most extreme values and is not influenced by outliers.'
+  };
+  const wrong = {
+    q1:'❌ For skewed data the <em>median</em> is preferred because the mean is pulled toward the long tail.',
+    q2:'❌ Sorted dataset: 2, 4, 4, <strong>6</strong>, 6, 6, 8 — the 4th (middle) value is 6.',
+    q3:'❌ The <em>IQR</em> is the robust measure. Range and SD are heavily affected by outliers.'
+  };
+  document.getElementById('checkQ').addEventListener('click', () => {
+    ['q1','q2','q3'].forEach(id => {
+      const sel = document.querySelector(`input[name=${id}]:checked`);
+      const fb = document.getElementById(`${id}-fb`);
+      if (!sel) { fb.innerHTML='Please select an answer.'; fb.className='quiz-feedback incorrect'; return; }
+      const ok = sel.value === answers[id];
+      fb.innerHTML = ok ? exp[id] : wrong[id];
+      fb.className = 'quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp => {
+        inp.closest('.quiz-option').className = 'quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

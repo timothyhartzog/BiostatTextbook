@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 7 – Hypothesis Testing</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 7</li>
+        <li>Hypothesis Testing</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 7</div>
+        <h1>Hypothesis Testing</h1>
+        <p>Hypothesis testing is the engine of statistical inference — a formal framework for deciding whether data provide enough evidence against a null hypothesis.</p>
+      </div>
+
+      <!-- 7.1 -->
+      <section class="section">
+        <h2>7.1 The Logic of Hypothesis Testing</h2>
+        <p>Statistical hypothesis testing works by assuming the null hypothesis is true and asking: "How likely are we to see data at least as extreme as what we observed, purely by chance?"</p>
+        <ol>
+          <li>State the <strong>null hypothesis (H₀)</strong> and <strong>alternative hypothesis (H₁)</strong>.</li>
+          <li>Choose a <strong>significance level α</strong> (typically 0.05).</li>
+          <li>Collect data and compute a <strong>test statistic</strong>.</li>
+          <li>Calculate the <strong>p-value</strong>.</li>
+          <li>Make a decision: reject H₀ if p &lt; α.</li>
+          <li>Interpret the result in context.</li>
+        </ol>
+      </section>
+
+      <!-- 7.2 -->
+      <section class="section">
+        <h2>7.2 Hypotheses</h2>
+        <p>The <strong>null hypothesis (H₀)</strong> is the default claim of "no effect" or "no difference." The <strong>alternative hypothesis (H₁)</strong> is what we hope to show.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Test type</th><th>H₀</th><th>H₁</th></tr></thead>
+            <tbody>
+              <tr><td>Two-tailed</td><td>μ = μ₀</td><td>μ ≠ μ₀</td></tr>
+              <tr><td>Right-tailed</td><td>μ ≤ μ₀</td><td>μ &gt; μ₀</td></tr>
+              <tr><td>Left-tailed</td><td>μ ≥ μ₀</td><td>μ &lt; μ₀</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7.3 p-values -->
+      <section class="section">
+        <h2>7.3 The p-value</h2>
+        <p>The <strong>p-value</strong> is the probability of obtaining a test statistic at least as extreme as the one computed, assuming H₀ is true.</p>
+        <div class="callout callout-warning">
+          <strong>⚠️ Common Misconception</strong>
+          The p-value is <em>not</em> the probability that H₀ is true. It is the probability of the observed data (or more extreme) if H₀ were true.
+        </div>
+        <ul>
+          <li>p &lt; α → statistically significant evidence against H₀ → reject H₀</li>
+          <li>p ≥ α → insufficient evidence against H₀ → fail to reject H₀</li>
+        </ul>
+        <div class="callout callout-info">
+          <strong>💡 Statistical vs Clinical Significance</strong>
+          A result can be statistically significant (small p-value) but clinically unimportant (very small effect size). Always report and interpret effect sizes alongside p-values.
+        </div>
+      </section>
+
+      <!-- 7.4 Errors -->
+      <section class="section">
+        <h2>7.4 Type I and Type II Errors</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>H₀ is TRUE</th><th>H₀ is FALSE</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Reject H₀</strong></td><td>❌ Type I error (False Positive) P = α</td><td>✅ Correct (Power) P = 1 − β</td></tr>
+              <tr><td><strong>Fail to reject H₀</strong></td><td>✅ Correct P = 1 − α</td><td>❌ Type II error (False Negative) P = β</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li><strong>α</strong> (Type I error rate): set by the researcher; typically 0.05.</li>
+          <li><strong>β</strong> (Type II error rate): related to sample size and effect size; typically 0.20.</li>
+          <li><strong>Power = 1 − β</strong>: probability of correctly detecting a real effect.</li>
+        </ul>
+      </section>
+
+      <!-- 7.5 Interactive p-value visualiser -->
+      <section class="section">
+        <h2>7.5 Interactive: p-value Visualiser</h2>
+        <p>Adjust the z-statistic and see the corresponding p-value shaded on the standard normal curve.</p>
+
+        <div class="widget">
+          <div class="widget-title">📊 p-value Visualiser (Z-test)</div>
+          <div class="form-group">
+            <label>Test type</label>
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+              <label style="font-weight:normal"><input type="radio" name="testType" value="two" checked> Two-tailed</label>
+              <label style="font-weight:normal"><input type="radio" name="testType" value="right"> Right-tailed</label>
+              <label style="font-weight:normal"><input type="radio" name="testType" value="left"> Left-tailed</label>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:.75rem">
+            <label>Z statistic</label>
+            <div class="range-wrap">
+              <input type="range" id="zStat" min="-4" max="4" value="1.96" step="0.01">
+              <span class="range-val" id="zStatVal">1.96</span>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="pvalChart"></canvas></div>
+          <div id="pvalStats" class="result-box" style="margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 7.6 Quiz -->
+      <section class="section">
+        <h2>7.6 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+
+          <div id="q1">
+            <p><strong>Q1.</strong> A p-value of 0.03 with α = 0.05 means:</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> There is a 3% probability that H₀ is true</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> We reject H₀ at the 5% significance level</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> The effect is clinically important</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> We accept H₁ with 97% confidence</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q2">
+            <p><strong>Q2.</strong> A drug works but the trial concludes no effect (p = 0.20). This is a:</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Type I error</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> Type II error</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Correct decision</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Power error</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q3">
+            <p><strong>Q3.</strong> Which of the following increases statistical power?</p>
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> Decreasing sample size</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> Increasing α from 0.05 to 0.01</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="c"> Increasing sample size</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="d"> Using a two-tailed instead of one-tailed test</label>
+            <div class="quiz-feedback" id="q3-fb"></div>
+          </div>
+
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter6.html">← Chapter 6: Sampling &amp; CLT</a>
+        <a href="chapter8.html">Chapter 8: t-Tests →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 7</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* ── p-value Visualiser ── */
+  let pvalChart = null;
+  function renderPVal() {
+    const z = +document.getElementById('zStat').value;
+    const type = document.querySelector('input[name=testType]:checked').value;
+    document.getElementById('zStatVal').textContent = z.toFixed(2);
+
+    const steps = 300;
+    const xs = [], pdf = [], shaded = [];
+    for (let i = 0; i <= steps; i++) {
+      const x = -4 + 8 * i / steps;
+      xs.push(x);
+      const y = Stats.normPDF(x);
+      pdf.push(y);
+      let shade = 0;
+      if (type === 'two')   shade = (Math.abs(x) >= Math.abs(z)) ? y : 0;
+      if (type === 'right') shade = (x >= z) ? y : 0;
+      if (type === 'left')  shade = (x <= z) ? y : 0;
+      shaded.push(shade);
+    }
+
+    let pval;
+    if (type === 'two')   pval = 2 * (1 - Stats.normCDF(Math.abs(z)));
+    if (type === 'right') pval = 1 - Stats.normCDF(z);
+    if (type === 'left')  pval = Stats.normCDF(z);
+
+    document.getElementById('pvalStats').innerHTML =
+      `Z = <strong>${z.toFixed(2)}</strong>&emsp;|&emsp;` +
+      `p-value = <strong style="color:${pval<0.05?'var(--danger)':'var(--success)'}">` +
+      `${Stats.pValueLabel(pval)}</strong>&emsp;|&emsp;` +
+      `Decision (α=0.05): <strong>${pval<0.05?'Reject H₀':'Fail to reject H₀'}</strong>`;
+
+    if (pvalChart) pvalChart.destroy();
+    pvalChart = new Chart(document.getElementById('pvalChart'), {
+      type: 'line',
+      data: {
+        labels: xs.map(v => v.toFixed(2)),
+        datasets: [
+          { data: pdf,    borderColor:'#1a5276', backgroundColor:'rgba(26,92,118,.05)', fill:true, pointRadius:0, tension:.4, label:'Z distribution' },
+          { data: shaded, borderColor:'transparent', backgroundColor:'rgba(231,76,60,.5)', fill:true, pointRadius:0, tension:.4, label:'p-value area' }
+        ]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{display:true}, title:{display:true,text:'Standard Normal Distribution'} },
+        scales:{
+          x:{ ticks:{maxTicksLimit:9}, title:{display:true,text:'Z'} },
+          y:{ title:{display:true,text:'Density'}, beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  document.getElementById('zStat').addEventListener('input', renderPVal);
+  document.querySelectorAll('input[name=testType]').forEach(r => r.addEventListener('change', renderPVal));
+  renderPVal();
+
+  /* Quiz */
+  const answers={q1:'b',q2:'b',q3:'c'};
+  const exp={
+    q1:'✅ Correct! p=0.03 < α=0.05 → we <strong>reject H₀</strong> at the 5% significance level.',
+    q2:'✅ Correct! Failing to detect a real effect is a <strong>Type II error</strong> (false negative).',
+    q3:'✅ Correct! A larger sample size reduces SE, increases the test statistic, and thus increases <strong>power</strong>.'
+  };
+  const wrong={
+    q1:'❌ The p-value is NOT the probability H₀ is true. p=0.03 < α=0.05 means we <em>reject H₀</em>.',
+    q2:'❌ A <em>Type II error</em> is failing to reject a false H₀ (missing a real effect).',
+    q3:'❌ Increasing n reduces SEM → larger test statistic → higher power. Decreasing α or using two-tailed tests actually reduce power.'
+  };
+  document.getElementById('checkQ').addEventListener('click',()=>{
+    ['q1','q2','q3'].forEach(id=>{
+      const sel=document.querySelector(`input[name=${id}]:checked`);
+      const fb=document.getElementById(`${id}-fb`);
+      if(!sel){fb.innerHTML='Please select.';fb.className='quiz-feedback incorrect';return;}
+      const ok=sel.value===answers[id];
+      fb.innerHTML=ok?exp[id]:wrong[id];
+      fb.className='quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp=>{
+        inp.closest('.quiz-option').className='quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

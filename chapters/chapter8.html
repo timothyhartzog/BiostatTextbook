@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 8 – t-Tests</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 8</li>
+        <li>t-Tests</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 8</div>
+        <h1>t-Tests</h1>
+        <p>The t-test is the workhorse of biomedical research — used to compare means when the population standard deviation is unknown. Three variants: one-sample, two-sample, and paired.</p>
+      </div>
+
+      <!-- 8.1 -->
+      <section class="section">
+        <h2>8.1 One-Sample t-Test</h2>
+        <p>Tests whether a sample mean differs from a known (hypothesised) population mean μ₀.</p>
+        <div class="formula">H₀: μ = μ₀ &emsp; H₁: μ ≠ μ₀</div>
+        <div class="formula">t = (x̄ − μ₀) / (s / √n) &emsp; df = n − 1</div>
+        <p><strong>Assumptions:</strong> Data approximately normally distributed (or n ≥ 30 by CLT), observations independent.</p>
+
+        <div class="callout callout-info">
+          <strong>Example</strong>
+          A sample of 25 adults has mean systolic BP = 126 mmHg and s = 12 mmHg. Is this significantly different from the normal value of 120 mmHg?
+          t = (126 − 120) / (12/√25) = 6/2.4 = <strong>2.50</strong>, df = 24.
+        </div>
+      </section>
+
+      <!-- 8.2 -->
+      <section class="section">
+        <h2>8.2 Two-Sample t-Test (Welch)</h2>
+        <p>Compares the means of <strong>two independent groups</strong>. Welch's version does not assume equal variances and is preferred by default.</p>
+        <div class="formula">t = (x̄₁ − x̄₂) / √(s₁²/n₁ + s₂²/n₂)</div>
+        <div class="formula">df ≈ (s₁²/n₁ + s₂²/n₂)² / [(s₁²/n₁)²/(n₁−1) + (s₂²/n₂)²/(n₂−1)]  (Welch–Satterthwaite)</div>
+        <p><strong>Assumptions:</strong> Independence of groups; approximately normal distributions or large n.</p>
+      </section>
+
+      <!-- 8.3 -->
+      <section class="section">
+        <h2>8.3 Paired t-Test</h2>
+        <p>Used when measurements come in <strong>natural pairs</strong> (e.g., before/after, matched subjects). Calculate the difference d = x₁ − x₂ for each pair, then apply a one-sample t-test on d.</p>
+        <div class="formula">t = d̄ / (sₐ / √n) &emsp; df = n − 1</div>
+        <p>The paired design removes between-subject variability and is generally more powerful than an independent two-sample test when pairing is appropriate.</p>
+      </section>
+
+      <!-- 8.4 Interactive t-test calculator -->
+      <section class="section">
+        <h2>8.4 Interactive t-Test Calculator</h2>
+
+        <div class="widget">
+          <div class="widget-title">🧮 t-Test Calculator</div>
+          <div class="form-group">
+            <label>Test type</label>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap">
+              <label style="font-weight:normal"><input type="radio" name="tType" value="one" checked> One-sample</label>
+              <label style="font-weight:normal"><input type="radio" name="tType" value="two"> Two-sample (independent)</label>
+              <label style="font-weight:normal"><input type="radio" name="tType" value="paired"> Paired</label>
+            </div>
+          </div>
+
+          <!-- One-sample inputs -->
+          <div id="oneInputs">
+            <div class="input-row">
+              <div class="form-group">
+                <label for="oneMu0">Hypothesised mean (μ₀)</label>
+                <input type="number" id="oneMu0" class="form-control" value="120" step="any">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="oneData">Sample data (space or comma separated)</label>
+              <textarea id="oneData" class="form-control" rows="2" placeholder="126 118 131 122 115 128 134 119 125 130"></textarea>
+            </div>
+          </div>
+
+          <!-- Two-sample inputs -->
+          <div id="twoInputs" style="display:none">
+            <div class="form-group">
+              <label for="g1Data">Group 1 data</label>
+              <textarea id="g1Data" class="form-control" rows="2" placeholder="72 78 65 80 74 69 76 82"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="g2Data">Group 2 data</label>
+              <textarea id="g2Data" class="form-control" rows="2" placeholder="85 91 79 88 94 83 87 90"></textarea>
+            </div>
+          </div>
+
+          <!-- Paired inputs -->
+          <div id="pairedInputs" style="display:none">
+            <div class="form-group">
+              <label for="preData">Pre-treatment data</label>
+              <textarea id="preData" class="form-control" rows="2" placeholder="130 142 128 135 148 122 138 145"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="postData">Post-treatment data</label>
+              <textarea id="postData" class="form-control" rows="2" placeholder="120 128 119 125 132 115 125 130"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:.75rem">
+            <label>Significance level (α)</label>
+            <select id="tAlpha" class="form-control" style="max-width:150px">
+              <option value="0.10">0.10</option>
+              <option value="0.05" selected>0.05</option>
+              <option value="0.01">0.01</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" id="runTTest">Run t-Test</button>
+          <div id="tResult" class="result-box" style="display:none;margin-top:1rem"></div>
+          <div id="tError"  class="callout callout-danger" style="display:none;margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 8.5 When to use which test -->
+      <section class="section">
+        <h2>8.5 Choosing the Right t-Test</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Situation</th><th>Test</th></tr></thead>
+            <tbody>
+              <tr><td>One sample vs known value</td><td>One-sample t-test</td></tr>
+              <tr><td>Two independent groups</td><td>Independent (Welch) t-test</td></tr>
+              <tr><td>Before and after (same subjects)</td><td>Paired t-test</td></tr>
+              <tr><td>Non-normal data, small n</td><td>Mann-Whitney U (non-parametric)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Quiz -->
+      <section class="section">
+        <h2>8.6 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+          <div id="q1">
+            <p><strong>Q1.</strong> Blood pressure is measured in 10 patients before and after a new antihypertensive drug. Which test should be used?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> One-sample t-test</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> Two-sample (Welch) t-test</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> Paired t-test</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> Chi-square test</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+          <div id="q2">
+            <p><strong>Q2.</strong> Increasing the sample size in a t-test will generally:</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Decrease the t statistic</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> Increase the p-value</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Increase the degrees of freedom and statistical power</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Widen the confidence interval</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter7.html">← Chapter 7: Hypothesis Testing</a>
+        <a href="chapter9.html">Chapter 9: Chi-Square Tests →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 8</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* Show/hide inputs based on test type */
+  document.querySelectorAll('input[name=tType]').forEach(r => r.addEventListener('change', () => {
+    const v = r.value;
+    document.getElementById('oneInputs').style.display    = v==='one'    ? 'block' : 'none';
+    document.getElementById('twoInputs').style.display    = v==='two'    ? 'block' : 'none';
+    document.getElementById('pairedInputs').style.display = v==='paired' ? 'block' : 'none';
+  }));
+
+  document.getElementById('runTTest').addEventListener('click', () => {
+    const type  = document.querySelector('input[name=tType]:checked').value;
+    const alpha = +document.getElementById('tAlpha').value;
+    const err   = document.getElementById('tError');
+    const res   = document.getElementById('tResult');
+    err.style.display = 'none';
+    res.style.display = 'none';
+
+    let result, label;
+    try {
+      if (type === 'one') {
+        const mu0  = +document.getElementById('oneMu0').value;
+        const data = Stats.parseNumbers(document.getElementById('oneData').value);
+        if (data.length < 2) throw new Error('Need at least 2 values.');
+        result = Stats.oneSampleT(data, mu0);
+        label  = `One-Sample t-Test (μ₀ = ${mu0})`;
+      } else if (type === 'two') {
+        const d1 = Stats.parseNumbers(document.getElementById('g1Data').value);
+        const d2 = Stats.parseNumbers(document.getElementById('g2Data').value);
+        if (d1.length < 2 || d2.length < 2) throw new Error('Need at least 2 values per group.');
+        result = Stats.twoSampleT(d1, d2);
+        label  = 'Two-Sample Welch t-Test';
+      } else {
+        const pre  = Stats.parseNumbers(document.getElementById('preData').value);
+        const post = Stats.parseNumbers(document.getElementById('postData').value);
+        if (pre.length !== post.length || pre.length < 2) throw new Error('Groups must have same length (≥2).');
+        const diffs = pre.map((v,i) => v - post[i]);
+        result = Stats.oneSampleT(diffs, 0);
+        result._mean1 = Stats.mean(pre); result._mean2 = Stats.mean(post);
+        label  = 'Paired t-Test';
+      }
+    } catch(e) {
+      err.textContent = e.message;
+      err.style.display = 'block';
+      return;
+    }
+
+    const sig = result.pValue < alpha;
+    let rows = '';
+    if (type === 'one') {
+      rows += `<tr><td>Sample mean (x̄)</td><td>${Stats.round(result.mean,3)}</td></tr>`;
+      rows += `<tr><td>Sample SD (s)</td><td>${Stats.round(result.sd,3)}</td></tr>`;
+      rows += `<tr><td>n</td><td>${result.n}</td></tr>`;
+    } else if (type === 'two') {
+      rows += `<tr><td>Mean 1 / Mean 2</td><td>${Stats.round(result.mean1,3)} / ${Stats.round(result.mean2,3)}</td></tr>`;
+      rows += `<tr><td>SD 1 / SD 2</td><td>${Stats.round(result.sd1,3)} / ${Stats.round(result.sd2,3)}</td></tr>`;
+      rows += `<tr><td>n₁ / n₂</td><td>${result.n1} / ${result.n2}</td></tr>`;
+    } else {
+      rows += `<tr><td>Mean before / after</td><td>${Stats.round(result._mean1,3)} / ${Stats.round(result._mean2,3)}</td></tr>`;
+      rows += `<tr><td>Mean difference (d̄)</td><td>${Stats.round(result.mean,3)}</td></tr>`;
+    }
+
+    res.style.display = 'block';
+    res.innerHTML = `
+      <h4>${label}</h4>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+        <tbody>
+          ${rows}
+          <tr><td>t statistic</td><td>${Stats.round(result.t,4)}</td></tr>
+          <tr><td>Degrees of freedom</td><td>${Stats.round(result.df,2)}</td></tr>
+          <tr><td>p-value (two-tailed)</td><td>${Stats.pValueLabel(result.pValue)}</td></tr>
+          <tr><td>Decision (α=${alpha})</td><td><strong style="color:${sig?'var(--danger)':'var(--success)'}">${sig?'Reject H₀ (significant)':'Fail to reject H₀'}</strong></td></tr>
+        </tbody>
+      </table></div>`;
+  });
+
+  /* Quiz */
+  const answers={q1:'c',q2:'c'};
+  const exp={q1:'✅ Correct! Same patients before and after → <strong>paired t-test</strong>.', q2:'✅ Correct! More n → higher df → narrower CI → more power.'};
+  const wrong={q1:'❌ Measurements on the same patients before and after calls for a <em>paired t-test</em>.', q2:'❌ Larger n increases df and power, and <em>narrows</em> confidence intervals.'};
+  document.getElementById('checkQ').addEventListener('click',()=>{
+    ['q1','q2'].forEach(id=>{
+      const sel=document.querySelector(`input[name=${id}]:checked`);
+      const fb=document.getElementById(`${id}-fb`);
+      if(!sel){fb.innerHTML='Please select.';fb.className='quiz-feedback incorrect';return;}
+      const ok=sel.value===answers[id];
+      fb.innerHTML=ok?exp[id]:wrong[id];
+      fb.className='quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp=>{
+        inp.closest('.quiz-option').className='quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>
