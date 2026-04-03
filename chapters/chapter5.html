@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 5 – Probability Distributions</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 5</li>
+        <li>Probability Distributions</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 5</div>
+        <h1>Probability Distributions</h1>
+        <p>A probability distribution describes all possible values a random variable can take and how likely each is. Interactive visualisers let you explore distributions in real time.</p>
+      </div>
+
+      <!-- 5.1 -->
+      <section class="section">
+        <h2>5.1 The Normal Distribution</h2>
+        <p>The <strong>normal (Gaussian) distribution</strong> is the most important in biostatistics. It is bell-shaped, symmetric about its mean, and fully characterised by two parameters:</p>
+        <div class="formula">X ~ N(μ, σ²)</div>
+        <ul>
+          <li><strong>μ</strong> = mean (location)</li>
+          <li><strong>σ</strong> = standard deviation (spread)</li>
+        </ul>
+        <p>The probability density function (PDF):</p>
+        <div class="formula">f(x) = (1 / (σ√(2π))) × e^(−½((x−μ)/σ)²)</div>
+
+        <h3>The 68–95–99.7 Rule</h3>
+        <ul>
+          <li>~68% of values fall within ±1σ of the mean</li>
+          <li>~95% of values fall within ±2σ of the mean</li>
+          <li>~99.7% of values fall within ±3σ of the mean</li>
+        </ul>
+
+        <h3>Standard Normal (Z) Distribution</h3>
+        <p>Any normal distribution can be standardised:</p>
+        <div class="formula">Z = (X − μ) / σ, where Z ~ N(0, 1)</div>
+      </section>
+
+      <!-- 5.2 Interactive normal -->
+      <section class="section">
+        <h2>5.2 Interactive Normal Distribution Explorer</h2>
+
+        <div class="widget">
+          <div class="widget-title">📈 Normal Distribution Visualiser</div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Mean (μ)</label>
+              <div class="range-wrap">
+                <input type="range" id="normMu" min="-5" max="5" value="0" step="0.5">
+                <span class="range-val" id="normMuVal">0</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Std Dev (σ)</label>
+              <div class="range-wrap">
+                <input type="range" id="normSd" min="0.3" max="4" value="1" step="0.1">
+                <span class="range-val" id="normSdVal">1</span>
+              </div>
+            </div>
+          </div>
+          <div class="input-row" style="margin-top:.75rem">
+            <div class="form-group">
+              <label>Shade P(X ≤ x): x =</label>
+              <div class="range-wrap">
+                <input type="range" id="normX" min="-10" max="10" value="1" step="0.25">
+                <span class="range-val" id="normXVal">1</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="normChart"></canvas></div>
+          <div id="normStats" class="result-box" style="margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 5.3 Binomial -->
+      <section class="section">
+        <h2>5.3 The Binomial Distribution</h2>
+        <p>The binomial distribution models the number of successes in <strong>n independent trials</strong>, each with probability <strong>p</strong> of success:</p>
+        <div class="formula">X ~ Binomial(n, p)</div>
+        <div class="formula">P(X = k) = C(n,k) × p^k × (1−p)^(n−k)</div>
+        <ul>
+          <li>Mean: μ = np</li>
+          <li>Variance: σ² = np(1−p)</li>
+        </ul>
+        <div class="callout callout-info">
+          <strong>Example</strong>
+          If 20% of patients experience a side effect and we treat 10 patients, what is the probability exactly 2 experience the side effect? P(X=2) with n=10, p=0.20.
+        </div>
+      </section>
+
+      <!-- 5.4 Interactive binomial -->
+      <section class="section">
+        <h2>5.4 Interactive Binomial Distribution Explorer</h2>
+
+        <div class="widget">
+          <div class="widget-title">📊 Binomial Distribution Visualiser</div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Trials (n)</label>
+              <div class="range-wrap">
+                <input type="range" id="binN" min="1" max="50" value="10" step="1">
+                <span class="range-val" id="binNVal">10</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Probability (p)</label>
+              <div class="range-wrap">
+                <input type="range" id="binP" min="0.01" max="0.99" value="0.3" step="0.01">
+                <span class="range-val" id="binPVal">0.30</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="binChart"></canvas></div>
+          <div id="binStats" class="result-box" style="margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 5.5 Poisson -->
+      <section class="section">
+        <h2>5.5 The Poisson Distribution</h2>
+        <p>The Poisson distribution models <strong>counts of rare events</strong> occurring in a fixed time or space interval:</p>
+        <div class="formula">X ~ Poisson(λ)</div>
+        <div class="formula">P(X = k) = (e^−λ × λ^k) / k!</div>
+        <p>Mean = Variance = λ. Used for hospital admission rates, mutation counts, etc.</p>
+      </section>
+
+      <!-- 5.6 Quiz -->
+      <section class="section">
+        <h2>5.6 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+
+          <div id="q1">
+            <p><strong>Q1.</strong> For a standard normal distribution N(0,1), approximately what percentage of values fall between −2 and +2?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> 68%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> 95%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> 99.7%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> 50%</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q2">
+            <p><strong>Q2.</strong> A clinical trial treats 20 patients, each with a 25% chance of responding. What distribution describes the number of responders?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Normal</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> Poisson</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Binomial</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Exponential</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter4.html">← Chapter 4: Probability</a>
+        <a href="chapter6.html">Chapter 6: Sampling &amp; CLT →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 5</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* ── Normal chart ── */
+  let normChart = null;
+  function renderNormal() {
+    const mu = +document.getElementById('normMu').value;
+    const sigma = +document.getElementById('normSd').value;
+    const xCut = +document.getElementById('normX').value;
+    document.getElementById('normMuVal').textContent = mu;
+    document.getElementById('normSdVal').textContent = sigma.toFixed(1);
+    document.getElementById('normXVal').textContent = xCut.toFixed(2);
+
+    const lo = mu - 4*sigma, hi = mu + 4*sigma, steps = 200;
+    const xs = [], pdf = [], shaded = [];
+    for (let i = 0; i <= steps; i++) {
+      const x = lo + (hi - lo) * i / steps;
+      xs.push(x);
+      const y = Stats.normPDF((x - mu) / sigma) / sigma;
+      pdf.push(y);
+      shaded.push(x <= xCut ? y : 0);
+    }
+
+    const z = (xCut - mu) / sigma;
+    const pVal = Stats.normCDF(z);
+    document.getElementById('normStats').innerHTML = `
+      z = (${xCut.toFixed(2)} − ${mu}) / ${sigma.toFixed(1)} = <strong>${z.toFixed(3)}</strong>&emsp;|&emsp;
+      P(X ≤ ${xCut.toFixed(2)}) = <strong>${pVal.toFixed(4)}</strong>&emsp;|&emsp;
+      P(X &gt; ${xCut.toFixed(2)}) = <strong>${(1-pVal).toFixed(4)}</strong>`;
+
+    if (normChart) normChart.destroy();
+    normChart = new Chart(document.getElementById('normChart'), {
+      type: 'line',
+      data: {
+        labels: xs.map(v => v.toFixed(2)),
+        datasets: [
+          { label:'PDF', data: pdf, borderColor:'#1a5276', backgroundColor:'rgba(26,92,118,.08)', fill:true, pointRadius:0, tension:.4 },
+          { label:'P(X ≤ x)', data: shaded, borderColor:'transparent', backgroundColor:'rgba(26,188,156,.4)', fill:true, pointRadius:0, tension:.4 }
+        ]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{display:true}, title:{display:true, text:`N(μ=${mu}, σ=${sigma.toFixed(1)})`} },
+        scales:{
+          x:{ ticks:{maxTicksLimit:8}, title:{display:true,text:'x'} },
+          y:{ title:{display:true,text:'Density'}, beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  ['normMu','normSd','normX'].forEach(id => document.getElementById(id).addEventListener('input', renderNormal));
+  renderNormal();
+
+  /* ── Binomial chart ── */
+  let binChart = null;
+  function renderBinomial() {
+    const n = +document.getElementById('binN').value;
+    const p = +document.getElementById('binP').value;
+    document.getElementById('binNVal').textContent = n;
+    document.getElementById('binPVal').textContent = p.toFixed(2);
+
+    const ks = Array.from({length:n+1},(_,i)=>i);
+    const pmf = ks.map(k => Stats.binomPMF(k,n,p));
+    const meanB = n*p, varB = n*p*(1-p);
+
+    document.getElementById('binStats').innerHTML =
+      `Mean = np = ${meanB.toFixed(2)}&emsp;|&emsp;Std Dev = √(np(1−p)) = ${Math.sqrt(varB).toFixed(3)}`;
+
+    if (binChart) binChart.destroy();
+    binChart = new Chart(document.getElementById('binChart'), {
+      type: 'bar',
+      data: {
+        labels: ks,
+        datasets: [{ label:'P(X=k)', data:pmf, backgroundColor:'rgba(26,188,156,.7)', borderColor:'rgba(23,165,137,1)', borderWidth:1, borderRadius:3 }]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{display:false}, title:{display:true,text:`Binomial(n=${n}, p=${p.toFixed(2)})`} },
+        scales:{
+          x:{title:{display:true,text:'k (successes)'}},
+          y:{title:{display:true,text:'Probability'}, beginAtZero:true, max: Math.min(1, Math.max(...pmf)*1.3)}
+        }
+      }
+    });
+  }
+
+  ['binN','binP'].forEach(id => document.getElementById(id).addEventListener('input', renderBinomial));
+  renderBinomial();
+
+  /* Quiz */
+  const answers = {q1:'b', q2:'c'};
+  const exp = {q1:'✅ Correct! By the 68–95–99.7 rule, <strong>~95%</strong> of values fall within ±2 standard deviations.', q2:'✅ Correct! Fixed n trials, constant probability of success → <strong>Binomial</strong> distribution.'};
+  const wrong = {q1:'❌ ±2σ covers approximately <em>95%</em> of a normal distribution.', q2:'❌ Fixed number of independent trials with constant success probability is the <em>Binomial</em> distribution.'};
+  document.getElementById('checkQ').addEventListener('click', () => {
+    ['q1','q2'].forEach(id => {
+      const sel = document.querySelector(`input[name=${id}]:checked`);
+      const fb = document.getElementById(`${id}-fb`);
+      if (!sel) { fb.innerHTML='Please select.'; fb.className='quiz-feedback incorrect'; return; }
+      const ok = sel.value === answers[id];
+      fb.innerHTML = ok ? exp[id] : wrong[id];
+      fb.className = 'quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp => {
+        inp.closest('.quiz-option').className = 'quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

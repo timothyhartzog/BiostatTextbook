@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Biostatistics Textbook</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .feature-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .feature-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; display: flex; align-items: flex-start; gap: .75rem; }
+    .feature-icon { font-size: 1.6rem; line-height: 1; }
+    .feature-item h4 { color: var(--primary); margin-bottom: .2rem; font-size: .95rem; }
+    .feature-item p  { color: var(--muted); font-size: .85rem; margin: 0; }
+    .section-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; margin-bottom: .75rem; }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="site-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="index.html">Home</a>
+        <a href="chapters/chapter1.html">Chapters</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Main ── -->
+  <main class="main-content">
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Interactive Biostatistics Textbook</h1>
+      <p>A comprehensive, hands-on introduction to biostatistics for health and life sciences. Learn through interactive simulations, calculators, and examples.</p>
+      <div class="btn-group">
+        <a href="chapters/chapter1.html" class="btn btn-accent">Start Reading →</a>
+        <a href="#toc" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.6);">View Chapters</a>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <div class="section-label">What makes this textbook different</div>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div>
+            <h4>Interactive Charts</h4>
+            <p>Visualise distributions, data, and statistical concepts in real time.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🧮</div>
+          <div>
+            <h4>Built-in Calculators</h4>
+            <p>Enter your own data and compute statistics without leaving the page.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎲</div>
+          <div>
+            <h4>Simulations</h4>
+            <p>Run experiments to understand sampling, the CLT, and hypothesis testing.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div>
+            <h4>Practice Quizzes</h4>
+            <p>Test your understanding with instant-feedback questions at the end of each section.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="section" id="toc">
+      <h2>Table of Contents</h2>
+      <div class="card-grid">
+
+        <a href="chapters/chapter1.html" class="card-link">
+          <div class="chapter-num">Chapter 1</div>
+          <h3>Introduction to Biostatistics</h3>
+          <p>What is biostatistics? Populations, samples, variables, study designs.</p>
+        </a>
+
+        <a href="chapters/chapter2.html" class="card-link">
+          <div class="chapter-num">Chapter 2</div>
+          <h3>Types of Variables</h3>
+          <p>Nominal, ordinal, interval, ratio scales. Discrete vs continuous data.</p>
+        </a>
+
+        <a href="chapters/chapter3.html" class="card-link">
+          <div class="chapter-num">Chapter 3</div>
+          <h3>Descriptive Statistics</h3>
+          <p>Measures of centre, spread, and shape. Interactive calculator included.</p>
+        </a>
+
+        <a href="chapters/chapter4.html" class="card-link">
+          <div class="chapter-num">Chapter 4</div>
+          <h3>Probability</h3>
+          <p>Basic rules, conditional probability, Bayes' theorem, and independence.</p>
+        </a>
+
+        <a href="chapters/chapter5.html" class="card-link">
+          <div class="chapter-num">Chapter 5</div>
+          <h3>Probability Distributions</h3>
+          <p>Normal, binomial, and Poisson distributions with interactive explorer.</p>
+        </a>
+
+        <a href="chapters/chapter6.html" class="card-link">
+          <div class="chapter-num">Chapter 6</div>
+          <h3>Sampling &amp; the CLT</h3>
+          <p>Sampling distributions, standard error, and the Central Limit Theorem.</p>
+        </a>
+
+        <a href="chapters/chapter7.html" class="card-link">
+          <div class="chapter-num">Chapter 7</div>
+          <h3>Hypothesis Testing</h3>
+          <p>Null/alternative hypotheses, p-values, significance levels, Type I &amp; II errors.</p>
+        </a>
+
+        <a href="chapters/chapter8.html" class="card-link">
+          <div class="chapter-num">Chapter 8</div>
+          <h3>t-Tests</h3>
+          <p>One-sample, two-sample (Welch), and paired t-tests with calculator.</p>
+        </a>
+
+        <a href="chapters/chapter9.html" class="card-link">
+          <div class="chapter-num">Chapter 9</div>
+          <h3>Chi-Square Tests</h3>
+          <p>Goodness-of-fit and test of independence with interactive contingency table.</p>
+        </a>
+
+        <a href="chapters/chapter10.html" class="card-link">
+          <div class="chapter-num">Chapter 10</div>
+          <h3>Correlation &amp; Regression</h3>
+          <p>Pearson r, simple linear regression, and interactive scatter-plot builder.</p>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section card" id="about">
+      <h2>About This Textbook</h2>
+      <p>This open-access interactive textbook was designed for students in health and life science programs who need a solid grounding in biostatistical methods. Each chapter combines:</p>
+      <ul>
+        <li>Clear conceptual explanations with real-world health examples</li>
+        <li>Mathematical foundations and key formulas</li>
+        <li>Interactive tools so you can explore concepts with your own data</li>
+        <li>Self-assessment quizzes with immediate feedback</li>
+      </ul>
+      <p style="margin:0">No installation is required — everything runs in your browser.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Interactive Biostatistics Textbook &bull; Open Access &bull; Built for learners in health &amp; life sciences</p>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('siteNav').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

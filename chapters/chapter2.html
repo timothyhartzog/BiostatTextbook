@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2 – Types of Variables</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .scale-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin:1rem 0; }
+    .scale-card { border:2px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .scale-card h4 { margin-bottom:.4rem; }
+    .scale-card.nominal { border-color:#e74c3c; }
+    .scale-card.ordinal  { border-color:#e67e22; }
+    .scale-card.interval { border-color:#2980b9; }
+    .scale-card.ratio    { border-color:#27ae60; }
+    .scale-card.nominal h4 { color:#e74c3c; }
+    .scale-card.ordinal  h4 { color:#e67e22; }
+    .scale-card.interval h4 { color:#2980b9; }
+    .scale-card.ratio    h4 { color:#27ae60; }
+    .drag-source { display:inline-block; padding:.4rem .8rem; border-radius:var(--radius); background:var(--primary); color:#fff; margin:.3rem; cursor:grab; font-size:.9rem; user-select:none; }
+    .drag-source:active { cursor:grabbing; opacity:.7; }
+    .drop-zone { min-height:80px; border:2px dashed var(--border); border-radius:var(--radius); padding:.5rem; display:flex; flex-wrap:wrap; align-items:flex-start; gap:.3rem; }
+    .drop-zone.over { background:#ebf5fb; border-color:var(--primary); }
+    .drop-zone .drag-source { background:var(--accent); }
+    .classify-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+    @media(max-width:600px){ .classify-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 2</li>
+        <li>Types of Variables</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 2</div>
+        <h1>Types of Variables</h1>
+        <p>Variables are the measurements we collect. Understanding <em>what kind</em> of variable you have is the first step in choosing the right statistical method.</p>
+      </div>
+
+      <!-- 2.1 -->
+      <section class="section">
+        <h2>2.1 The Measurement Hierarchy</h2>
+        <p>Stevens (1946) proposed four levels of measurement, each building on the previous:</p>
+        <div class="scale-grid">
+          <div class="scale-card nominal">
+            <h4>Nominal</h4>
+            <p>Categories with <strong>no order</strong>. Labels only. <em>Example: blood type (A, B, AB, O), sex.</em></p>
+          </div>
+          <div class="scale-card ordinal">
+            <h4>Ordinal</h4>
+            <p>Categories with a <strong>meaningful order</strong>, but intervals between levels are not equal. <em>Example: cancer stage (I, II, III, IV), pain scale (1–10).</em></p>
+          </div>
+          <div class="scale-card interval">
+            <h4>Interval</h4>
+            <p>Ordered with <strong>equal intervals</strong>, but no true zero. <em>Example: temperature (°C), calendar year.</em></p>
+          </div>
+          <div class="scale-card ratio">
+            <h4>Ratio</h4>
+            <p>Equal intervals <strong>plus a true zero</strong>. <em>Example: weight, height, blood glucose, age, counts.</em></p>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>💡 Why Does This Matter?</strong>
+          Only ratio/interval data can meaningfully use arithmetic (means, standard deviations). Nominal/ordinal data require non-parametric methods or special models.
+        </div>
+      </section>
+
+      <!-- 2.2 -->
+      <section class="section">
+        <h2>2.2 Quantitative vs Qualitative Variables</h2>
+        <p>A broader classification divides variables into two groups:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Description</th><th>Examples</th><th>Measurement scale</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Quantitative (Numerical)</strong></td><td>Numbers that represent quantities</td><td>Blood pressure, age, BMI</td><td>Interval or Ratio</td></tr>
+              <tr><td><strong>Qualitative (Categorical)</strong></td><td>Groups or categories</td><td>Diagnosis, sex, ethnicity</td><td>Nominal or Ordinal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 2.3 -->
+      <section class="section">
+        <h2>2.3 Discrete vs Continuous Variables</h2>
+        <p><strong>Quantitative variables</strong> can be further split:</p>
+        <ul>
+          <li><strong>Discrete:</strong> Countable values, often integers. <em>Examples: number of hospital visits, number of children, white blood cell count.</em></li>
+          <li><strong>Continuous:</strong> Can take any value in a range. <em>Examples: height, body temperature, serum cholesterol.</em></li>
+        </ul>
+        <div class="callout callout-warning">
+          <strong>⚠️ Practical Note</strong>
+          In practice, continuous variables are always rounded to some precision. A variable measured on a fine enough scale (e.g., glucose with many decimal places) is treated as continuous.
+        </div>
+      </section>
+
+      <!-- 2.4 – Binary & Dichotomous -->
+      <section class="section">
+        <h2>2.4 Binary and Dichotomous Variables</h2>
+        <p>A special case of nominal variable with <strong>only two categories</strong> (e.g., disease present/absent, alive/dead). These are extremely common in biomedical research and are handled with logistic regression and risk ratios.</p>
+
+        <div class="table-wrap" style="margin-top:1rem">
+          <table>
+            <thead><tr><th>Variable</th><th>Type</th><th>Scale</th><th>Typical Analysis</th></tr></thead>
+            <tbody>
+              <tr><td>Blood type</td><td>Categorical</td><td>Nominal</td><td>Mode, chi-square</td></tr>
+              <tr><td>Pain level (1–10)</td><td>Categorical</td><td>Ordinal</td><td>Median, Mann-Whitney</td></tr>
+              <tr><td>Temperature (°C)</td><td>Quantitative</td><td>Interval</td><td>Mean, t-test</td></tr>
+              <tr><td>Weight (kg)</td><td>Quantitative</td><td>Ratio</td><td>Mean, t-test, regression</td></tr>
+              <tr><td>Disease (yes/no)</td><td>Categorical</td><td>Nominal (binary)</td><td>Proportion, odds ratio</td></tr>
+              <tr><td>Number of seizures</td><td>Quantitative</td><td>Ratio (discrete)</td><td>Mean, Poisson regression</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 2.5 – Interactive drag & drop -->
+      <section class="section">
+        <h2>2.5 Interactive: Variable Classification</h2>
+        <p>Drag each variable to the correct measurement scale category.</p>
+
+        <div class="widget">
+          <div class="widget-title">🏷️ Variable Classification Drag &amp; Drop</div>
+          <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem">Drag the tags below into the correct boxes.</p>
+
+          <div id="sourceItems" style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:.4rem"></div>
+
+          <div class="classify-grid">
+            <div>
+              <p style="font-weight:700;color:#e74c3c;margin-bottom:.4rem">Nominal</p>
+              <div class="drop-zone" id="drop-nominal" data-cat="nominal"></div>
+            </div>
+            <div>
+              <p style="font-weight:700;color:#e67e22;margin-bottom:.4rem">Ordinal</p>
+              <div class="drop-zone" id="drop-ordinal" data-cat="ordinal"></div>
+            </div>
+            <div>
+              <p style="font-weight:700;color:#2980b9;margin-bottom:.4rem">Interval</p>
+              <div class="drop-zone" id="drop-interval" data-cat="interval"></div>
+            </div>
+            <div>
+              <p style="font-weight:700;color:#27ae60;margin-bottom:.4rem">Ratio</p>
+              <div class="drop-zone" id="drop-ratio" data-cat="ratio"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-accent" id="checkClassify" style="margin-top:1rem">Check Classifications</button>
+          <button class="btn btn-outline btn-sm" id="resetClassify" style="margin-left:.5rem;margin-top:1rem">Reset</button>
+          <div id="classifyFeedback" class="result-box" style="display:none;margin-top:1rem"></div>
+        </div>
+      </section>
+
+      <!-- 2.6 Quiz -->
+      <section class="section">
+        <h2>2.6 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+
+          <div id="q1">
+            <p><strong>Q1.</strong> A patient's NYHA heart failure classification (Class I–IV) is what type of variable?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> Nominal</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> Ordinal</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> Interval</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> Ratio</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q2">
+            <p><strong>Q2.</strong> Which of the following is a continuous variable?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Number of pregnancies</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> Blood type</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Serum creatinine level</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Cancer stage</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q3">
+            <p><strong>Q3.</strong> Temperature measured in Celsius is an example of which measurement scale?</p>
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> Nominal</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> Ordinal</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="c"> Interval</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="d"> Ratio</label>
+            <div class="quiz-feedback" id="q3-fb"></div>
+          </div>
+
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter1.html">← Chapter 1: Introduction</a>
+        <a href="chapter3.html">Chapter 3: Descriptive Statistics →</a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Interactive Biostatistics Textbook &bull; Chapter 2</p>
+  </footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* ── Drag & Drop ── */
+  const items = [
+    { label: 'Blood type',      cat: 'nominal'  },
+    { label: 'Cancer stage',    cat: 'ordinal'  },
+    { label: 'Temperature °C',  cat: 'interval' },
+    { label: 'Body weight (kg)',cat: 'ratio'    },
+    { label: 'Sex (M/F)',       cat: 'nominal'  },
+    { label: 'Pain score 1–10', cat: 'ordinal'  },
+    { label: 'Cholesterol',     cat: 'ratio'    },
+    { label: 'Calendar year',   cat: 'interval' },
+  ];
+
+  let dragItem = null;
+
+  function renderItems() {
+    const src = document.getElementById('sourceItems');
+    src.innerHTML = '';
+    items.forEach((item, idx) => {
+      const el = document.createElement('div');
+      el.className = 'drag-source';
+      el.textContent = item.label;
+      el.draggable = true;
+      el.dataset.idx = idx;
+      el.addEventListener('dragstart', e => { dragItem = idx; e.dataTransfer.effectAllowed = 'move'; });
+      src.appendChild(el);
+    });
+  }
+
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('over');
+      if (dragItem === null) return;
+      const item = items[dragItem];
+      // Remove from source if present
+      const srcEl = document.querySelector(`#sourceItems [data-idx="${dragItem}"]`);
+      if (srcEl) srcEl.remove();
+      // Remove from other zones
+      document.querySelectorAll('.drop-zone').forEach(z => {
+        z.querySelectorAll(`[data-idx="${dragItem}"]`).forEach(el => el.remove());
+      });
+      const el = document.createElement('div');
+      el.className = 'drag-source';
+      el.textContent = item.label;
+      el.draggable = true;
+      el.dataset.idx = dragItem;
+      el.addEventListener('dragstart', ev => { dragItem = +el.dataset.idx; ev.dataTransfer.effectAllowed = 'move'; });
+      zone.appendChild(el);
+      dragItem = null;
+    });
+  });
+
+  document.getElementById('resetClassify').addEventListener('click', () => {
+    document.querySelectorAll('.drop-zone').forEach(z => z.innerHTML = '');
+    renderItems();
+    document.getElementById('classifyFeedback').style.display = 'none';
+  });
+
+  document.getElementById('checkClassify').addEventListener('click', () => {
+    let correct = 0, total = items.length;
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+      const cat = zone.dataset.cat;
+      zone.querySelectorAll('.drag-source').forEach(el => {
+        const idx = +el.dataset.idx;
+        if (items[idx].cat === cat) correct++;
+      });
+    });
+    const fb = document.getElementById('classifyFeedback');
+    fb.style.display = 'block';
+    if (correct === total) {
+      fb.innerHTML = `<span style="color:var(--success)">✅ Perfect! All ${total} variables correctly classified.</span>`;
+    } else {
+      const answers = items.map(i => `<li><strong>${i.label}</strong>: ${i.cat}</li>`).join('');
+      fb.innerHTML = `<p style="color:var(--warning)">⚠️ ${correct}/${total} correct. Review the answers below:</p><ul>${answers}</ul>`;
+    }
+  });
+
+  renderItems();
+
+  /* ── Quiz ── */
+  const answers = { q1:'b', q2:'c', q3:'c' };
+  const exp = {
+    q1: '✅ Correct! NYHA classes are <strong>ordered categories</strong> (ordinal), but the intervals between them are not equal.',
+    q2: '✅ Correct! Serum creatinine is a <strong>continuous</strong> ratio variable.',
+    q3: '✅ Correct! Celsius has equal intervals but no true zero (0°C is not the absence of heat), making it <strong>interval</strong>.'
+  };
+  const wrong = {
+    q1: '❌ Incorrect. NYHA classes have a meaningful order (I < II < III < IV) but are not equally spaced — this is <em>ordinal</em>.',
+    q2: '❌ Incorrect. Serum creatinine can take any positive value and is a <em>continuous</em> variable.',
+    q3: '❌ Incorrect. Celsius has equal intervals but 0°C is not truly "no heat" — it is <em>interval</em>, not ratio.'
+  };
+
+  document.getElementById('checkQ').addEventListener('click', () => {
+    ['q1','q2','q3'].forEach(id => {
+      const sel = document.querySelector(`input[name=${id}]:checked`);
+      const fb = document.getElementById(`${id}-fb`);
+      if (!sel) { fb.innerHTML = 'Please select an answer.'; fb.className = 'quiz-feedback incorrect'; return; }
+      const ok = sel.value === answers[id];
+      fb.innerHTML = ok ? exp[id] : wrong[id];
+      fb.className = 'quiz-feedback ' + (ok ? 'correct' : 'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp => {
+        inp.closest('.quiz-option').className =
+          'quiz-option ' + (inp.value === answers[id] ? 'correct' : (inp.checked ? 'incorrect' : ''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

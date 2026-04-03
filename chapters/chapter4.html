@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 4 – Probability</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 4</li>
+        <li>Probability</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 4</div>
+        <h1>Probability</h1>
+        <p>Probability is the language of uncertainty. Mastering its basic rules is essential for understanding statistical inference.</p>
+      </div>
+
+      <!-- 4.1 -->
+      <section class="section">
+        <h2>4.1 Basic Definitions</h2>
+        <p>The <strong>probability</strong> of an event A is a number between 0 and 1 representing how likely A is to occur:</p>
+        <div class="formula">0 ≤ P(A) ≤ 1</div>
+        <ul>
+          <li>P(A) = 0 → impossible event</li>
+          <li>P(A) = 1 → certain event</li>
+          <li>P(A) + P(Aᶜ) = 1, where Aᶜ is the complement (A does not occur)</li>
+        </ul>
+        <p>For equally likely outcomes:</p>
+        <div class="formula">P(A) = (number of outcomes in A) / (total outcomes in sample space)</div>
+      </section>
+
+      <!-- 4.2 -->
+      <section class="section">
+        <h2>4.2 Addition Rule</h2>
+        <p>For <strong>any two events</strong> A and B:</p>
+        <div class="formula">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</div>
+        <p>If A and B are <strong>mutually exclusive</strong> (cannot both occur):</p>
+        <div class="formula">P(A ∪ B) = P(A) + P(B)</div>
+
+        <div class="callout callout-info">
+          <strong>Example</strong>
+          In a population, 30% have hypertension (H), 20% have diabetes (D), and 8% have both. What is the probability of having either condition?<br>
+          P(H ∪ D) = 0.30 + 0.20 − 0.08 = <strong>0.42</strong>
+        </div>
+      </section>
+
+      <!-- 4.3 -->
+      <section class="section">
+        <h2>4.3 Multiplication Rule &amp; Independence</h2>
+        <p>Two events are <strong>independent</strong> if knowing one occurred gives no information about the other:</p>
+        <div class="formula">P(A ∩ B) = P(A) × P(B)  [if A and B are independent]</div>
+        <p>In general:</p>
+        <div class="formula">P(A ∩ B) = P(A) × P(B | A)</div>
+        <p>where P(B | A) is the <strong>conditional probability</strong> of B given A.</p>
+      </section>
+
+      <!-- 4.4 -->
+      <section class="section">
+        <h2>4.4 Conditional Probability</h2>
+        <p>The probability of B occurring <em>given</em> that A has already occurred:</p>
+        <div class="formula">P(B | A) = P(A ∩ B) / P(A),  provided P(A) &gt; 0</div>
+
+        <div class="callout callout-info">
+          <strong>Example</strong>
+          Among patients tested for COVID-19, 10% are positive. Of those who are positive, 90% have a fever. What is the probability a randomly chosen patient is both positive and has a fever?<br>
+          P(Positive ∩ Fever) = P(Positive) × P(Fever | Positive) = 0.10 × 0.90 = <strong>0.09</strong>
+        </div>
+      </section>
+
+      <!-- 4.5 Bayes -->
+      <section class="section">
+        <h2>4.5 Bayes' Theorem</h2>
+        <p>Bayes' theorem allows us to <em>update</em> a probability after observing new evidence:</p>
+        <div class="formula">P(A | B) = [P(B | A) × P(A)] / P(B)</div>
+        <p>This is fundamental to understanding <strong>diagnostic test performance</strong>.</p>
+
+        <h3>Sensitivity, Specificity, and Predictive Values</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Metric</th><th>Definition</th><th>Formula</th></tr></thead>
+            <tbody>
+              <tr><td>Sensitivity (Se)</td><td>True positive rate</td><td>TP / (TP + FN)</td></tr>
+              <tr><td>Specificity (Sp)</td><td>True negative rate</td><td>TN / (TN + FP)</td></tr>
+              <tr><td>PPV</td><td>Prob. disease given positive test</td><td>TP / (TP + FP)</td></tr>
+              <tr><td>NPV</td><td>Prob. no disease given negative test</td><td>TN / (TN + FN)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4.6 Interactive Bayes Calculator -->
+      <section class="section">
+        <h2>4.6 Interactive: Diagnostic Test Calculator</h2>
+        <p>Enter the prevalence (pre-test probability) and test performance characteristics to compute post-test probabilities using Bayes' theorem.</p>
+
+        <div class="widget">
+          <div class="widget-title">🔬 Diagnostic Test (Bayes) Calculator</div>
+          <div class="input-row">
+            <div class="form-group">
+              <label for="prevInput">Disease Prevalence (%)</label>
+              <input type="number" id="prevInput" class="form-control" value="5" min="0.1" max="99.9" step="0.1">
+            </div>
+            <div class="form-group">
+              <label for="sensInput">Sensitivity (%)</label>
+              <input type="number" id="sensInput" class="form-control" value="90" min="1" max="100" step="0.1">
+            </div>
+            <div class="form-group">
+              <label for="specInput">Specificity (%)</label>
+              <input type="number" id="specInput" class="form-control" value="95" min="1" max="100" step="0.1">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="calcBayes">Calculate</button>
+
+          <div id="bayesResult" class="result-box" style="display:none;margin-top:1rem">
+            <h4>Results</h4>
+            <div id="bayesTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4.7 Quiz -->
+      <section class="section">
+        <h2>4.7 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+
+          <div id="q1">
+            <p><strong>Q1.</strong> If P(A) = 0.4 and P(B) = 0.3 and A and B are mutually exclusive, what is P(A ∪ B)?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> 0.12</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> 0.58</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> 0.70</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> 1.00</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q2">
+            <p><strong>Q2.</strong> A test has sensitivity = 80% and specificity = 90%. The disease prevalence is 10%. Using Bayes' theorem, which of these would INCREASE the positive predictive value (PPV) most?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Decreasing specificity</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> Applying the test in a higher-prevalence population</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Applying the test in a lower-prevalence population</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Decreasing sensitivity</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+
+          <div id="q3">
+            <p><strong>Q3.</strong> P(B | A) = 0.6 and P(A) = 0.25. What is P(A ∩ B)?</p>
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> 0.85</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> 0.35</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="c"> 0.15</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="d"> 0.24</label>
+            <div class="quiz-feedback" id="q3-fb"></div>
+          </div>
+
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter3.html">← Chapter 3: Descriptive Statistics</a>
+        <a href="chapter5.html">Chapter 5: Probability Distributions →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 4</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  document.getElementById('calcBayes').addEventListener('click', () => {
+    const prev = +document.getElementById('prevInput').value / 100;
+    const sens = +document.getElementById('sensInput').value / 100;
+    const spec = +document.getElementById('specInput').value / 100;
+    // Bayes
+    const pTP = prev * sens;
+    const pFP = (1 - prev) * (1 - spec);
+    const pFN = prev * (1 - sens);
+    const pTN = (1 - prev) * spec;
+    const pPos = pTP + pFP;
+    const pNeg = pFN + pTN;
+    const PPV = pTP / pPos;
+    const NPV = pTN / pNeg;
+    const LRpos = sens / (1 - spec);
+    const LRneg = (1 - sens) / spec;
+
+    document.getElementById('bayesResult').style.display = 'block';
+    document.getElementById('bayesTable').innerHTML = `
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Pre-test probability (prevalence)</td><td>${(prev*100).toFixed(1)}%</td></tr>
+          <tr><td>P(positive test)</td><td>${(pPos*100).toFixed(2)}%</td></tr>
+          <tr><td>PPV (Post-test prob. if test +)</td><td><strong>${(PPV*100).toFixed(1)}%</strong></td></tr>
+          <tr><td>NPV (Post-test prob. if test −)</td><td><strong>${(NPV*100).toFixed(1)}%</strong></td></tr>
+          <tr><td>Likelihood Ratio (+)</td><td>${LRpos.toFixed(2)}</td></tr>
+          <tr><td>Likelihood Ratio (−)</td><td>${LRneg.toFixed(3)}</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:.85rem;color:var(--muted);margin-top:.75rem">
+        PPV = probability of having the disease given a positive test result.
+      </p>`;
+  });
+
+  /* Quiz */
+  const answers = { q1:'c', q2:'b', q3:'c' };
+  const exp = {
+    q1:'✅ Correct! Mutually exclusive: P(A ∪ B) = 0.4 + 0.3 = <strong>0.70</strong>.',
+    q2:'✅ Correct! <strong>Higher prevalence</strong> increases the proportion of true positives among all positives, increasing PPV.',
+    q3:'✅ Correct! P(A ∩ B) = P(B|A) × P(A) = 0.6 × 0.25 = <strong>0.15</strong>.'
+  };
+  const wrong = {
+    q1:'❌ For mutually exclusive events: P(A ∪ B) = P(A) + P(B) = 0.4 + 0.3 = 0.70.',
+    q2:'❌ Applying in a <em>higher-prevalence</em> population increases PPV because there are more true positives relative to false positives.',
+    q3:'❌ P(A ∩ B) = P(B|A) × P(A) = 0.6 × 0.25 = 0.15.'
+  };
+  document.getElementById('checkQ').addEventListener('click', () => {
+    ['q1','q2','q3'].forEach(id => {
+      const sel = document.querySelector(`input[name=${id}]:checked`);
+      const fb = document.getElementById(`${id}-fb`);
+      if (!sel) { fb.innerHTML='Please select.'; fb.className='quiz-feedback incorrect'; return; }
+      const ok = sel.value === answers[id];
+      fb.innerHTML = ok ? exp[id] : wrong[id];
+      fb.className = 'quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp => {
+        inp.closest('.quiz-option').className = 'quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>
