@@ -1,0 +1,600 @@
+{
+  "project": {
+    "name": "Biostatistics for Physician Researchers",
+    "description": "Interactive biostatistics textbook as a Quarto Book with Observable JS + WebR",
+    "version": "2.0.0",
+    "date": "2026-04-03",
+    "total_prompts": 42,
+    "total_chapters": 30,
+    "framework": "Quarto Book + Observable JS + WebR",
+    "deployment": "Static site — GitHub Pages / Netlify",
+    "standards": "Hartzog color system, Wong colorblind palette"
+  },
+
+  "architecture": {
+    "computation_layers": {
+      "layer_1_julia_build_time": {
+        "engine": "Julia 1.11+ via QuartoNotebookRunner.jl",
+        "purpose": "Pre-compute datasets, static tables, reference values during quarto render",
+        "cell_type": "{julia}",
+        "runtime_cost": "Zero — output baked into HTML"
+      },
+      "layer_2_observable_js": {
+        "engine": "Observable JS reactive runtime",
+        "purpose": "Interactive visualizations (D3 v7, Observable Plot), parameter sliders, animated simulations",
+        "cell_type": "{ojs}",
+        "runtime_cost": "Client-side only — zero server"
+      },
+      "layer_3_webr": {
+        "engine": "WebR via quarto-live extension",
+        "purpose": "User data upload + statistical analysis, exercise grading, live code editing",
+        "cell_type": "{webr}",
+        "runtime_cost": "Client-side WebAssembly — zero server"
+      }
+    },
+    "technology_stack": {
+      "publishing": "Quarto 1.6+ Book format",
+      "build_time": "Julia 1.11+",
+      "visualization": "Observable Plot + D3 v7",
+      "user_analysis": "WebR (quarto-live)",
+      "statistics_js": "jstat.js + custom stat-engine.js",
+      "exercises": "quarto-live exercises with grading",
+      "theme": "Custom SCSS",
+      "deployment": "GitHub Pages / Netlify (static)"
+    },
+    "free_from_quarto": [
+      "Table of contents",
+      "Chapter navigation (prev/next)",
+      "Full-text search",
+      "Cross-references (@sec-, @fig-, @tbl-, @eq-)",
+      "MathJax rendering",
+      "Responsive layout",
+      "Print/PDF export (quarto render --to pdf)",
+      "Dark mode toggle",
+      "Code folding",
+      "Citation management (BibTeX)",
+      "WCAG accessibility (semantic HTML)",
+      "Sitemap",
+      "EPUB export"
+    ],
+    "theme": {
+      "colors": {
+        "primary": "#1a365d",
+        "secondary": "#0d9488",
+        "accent": "#d97706"
+      },
+      "wong_colorblind_palette": ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#F0E442", "#56B4E9", "#E69F00"],
+      "fonts": {
+        "body": "Inter",
+        "code": "JetBrains Mono",
+        "math": "STIX Two Math"
+      }
+    }
+  },
+
+  "agentic_workflow": {
+    "phases": {
+      "phase_1_foundation": {
+        "execution": "sequential",
+        "prompts": ["001", "002", "003", "004"],
+        "estimated_time": "80 min"
+      },
+      "phase_2_chapters": {
+        "execution": "parallel (up to 10 concurrent)",
+        "waves": {
+          "A": {"prompts": ["010", "011", "016"], "chapters": [1, 2, 7], "note": "no chapter deps"},
+          "B": {"prompts": ["012", "013"], "chapters": [3, 4], "note": "need Ch1-2"},
+          "C": {"prompts": ["014", "015"], "chapters": [5, 6], "note": "need Ch1-3"},
+          "D": {"prompts": ["020", "021", "023"], "chapters": [8, 9, 11], "note": "need beginner"},
+          "E": {"prompts": ["022", "026", "027"], "chapters": [10, 14, 15]},
+          "F": {"prompts": ["024", "025", "028"], "chapters": [12, 13, 16]},
+          "G": {"prompts": ["030", "031", "032", "033", "034", "035"], "chapters": [17, 18, 19, 20, 21, 22], "note": "advanced"},
+          "H": {"prompts": ["036", "037", "038", "039"], "chapters": [23, 24, 25, 26]},
+          "I": {"prompts": ["040", "041", "042"], "chapters": [27, 28, 29], "note": "expert"},
+          "J": {"prompts": ["043"], "chapters": [30], "note": "depends on ALL"}
+        },
+        "estimated_time": "45 min (10x parallel)"
+      },
+      "phase_3_integration": {
+        "execution": "sequential",
+        "prompts": ["050", "051", "052", "053"],
+        "estimated_time": "60 min"
+      },
+      "phase_4_qa_deploy": {
+        "execution": "sequential",
+        "prompts": ["060", "061", "062", "063"],
+        "estimated_time": "60 min"
+      }
+    },
+    "total_wall_time": "~4 hours",
+    "conflict_avoidance": "Each chapter is a single .qmd file. No shared files modified during Phase 2. _quarto.yml chapter listing assembled in Phase 3."
+  },
+
+  "prompts": {
+    "foundation": [
+      {
+        "id": "001",
+        "title": "Quarto Book Scaffold",
+        "phase": "foundation",
+        "prerequisites": [],
+        "tasks": [
+          "Initialize Quarto Book project: quarto create project book BiostatTextbook",
+          "Configure _quarto.yml: 30 chapters in 4 Parts (Beginner/Intermediate/Advanced/Expert) + Appendices, HTML format with custom SCSS, dark mode, MathJax, search, Julia engine with --project exeflags, execute cache/freeze",
+          "Install quarto-live extension: quarto add r-wasm/live",
+          "Create Julia Project.toml with build-time deps: HypothesisTests, GLM, Distributions, StatsBase, DataFrames, CSV, CairoMakie, MultipleTesting, Bootstrap, KernelDensity",
+          "Create assets/css/custom.scss: Hartzog colors, Wong palette, custom callout styles (Definition, Formula, Clinical Example, Common Mistake, Key Concept), exercise blocks, print styles",
+          "Create chapters/_common-setup.qmd: shared Julia imports + OJS module imports",
+          "Create placeholder index.qmd: book overview, tier descriptions, How to Use This Book",
+          "Create references.bib with 50+ foundational biostatistics references",
+          "Create CLAUDE.md with project conventions",
+          "Create directory skeleton for all folders",
+          "Create placeholder .qmd stubs for all 30 chapters",
+          "Verify: quarto render produces complete book with navigation, search, all placeholder chapters"
+        ],
+        "quality_gates": [
+          "quarto render succeeds without errors",
+          "Book renders with TOC, chapter navigation, search functional",
+          "Custom theme applies (colors, fonts, dark mode toggle)",
+          "MathJax renders test equation",
+          "All 30 chapter stubs accessible via navigation"
+        ]
+      },
+      {
+        "id": "002",
+        "title": "Shared OJS Modules & WebR Configuration",
+        "phase": "foundation",
+        "prerequisites": ["001"],
+        "modules": {
+          "stat-engine.js": {
+            "description": "Client-side statistical computation library (jstat + custom)",
+            "features": [
+              "Descriptive: mean, median, mode, SD, variance, IQR, skewness, kurtosis, percentiles",
+              "Distributions: normal/t/chi-squared/F/binomial/Poisson PDF/CDF/quantile via jstat",
+              "Tests: one-sample/two-sample/paired t, chi-squared, Fisher exact, correlation, Mann-Whitney",
+              "Effect sizes: Cohen's d, Hedges' g, eta-squared, OR, RR, NNT",
+              "Confidence intervals: mean (Z/t), proportion (Wilson/Clopper-Pearson), difference, bootstrap",
+              "Power approximations for t-test, chi-squared, correlation",
+              "Returns standardized TestResult objects: {testName, statistic, pValue, ci, effectSize, effectSizeName, df, n, interpretation}"
+            ]
+          },
+          "plot-factory.js": {
+            "description": "Observable Plot + D3 v7 visualization factory",
+            "features": [
+              "histogram(data, opts) with KDE overlay",
+              "boxplot(data, groups) with violin toggle",
+              "scatter(x, y) with regression line + CI band",
+              "qqPlot(data) with reference line",
+              "forestPlot(studies), kmPlot(times, events, groups), rocCurve(truth, scores)",
+              "funnelPlot(effects, se), heatmap(matrix), distributionPlot(type, params)",
+              "All: Wong colorblind palette, responsive, tooltips, SVG/PNG download"
+            ]
+          },
+          "interpretation.js": {
+            "description": "Auto-generate plain-English statistical interpretation",
+            "features": ["One-sentence verdict", "Effect size classification (Cohen)", "CI interpretation", "Clinical significance commentary", "APA-formatted result string", "Assumption warnings"]
+          },
+          "data-upload.js": {
+            "description": "Client-side CSV/TSV upload and parsing",
+            "features": ["Drag-and-drop file input", "Papa Parse with auto-detect delimiter/header/types", "Column type override UI", "Data preview table (20 rows)", "Validation (missing %, outlier flags)", "Export as reactive OJS variable"]
+          },
+          "exercise-engine.js": {
+            "description": "Quiz/exercise management with localStorage persistence",
+            "features": ["Multiple choice (single/multi)", "Numeric with tolerance", "Fill-in-blank", "Drag-and-drop matching", "Score tracking via localStorage", "Hint/solution reveal with attempt counting", "Per-chapter completion %"]
+          },
+          "table-one.js": {
+            "description": "Publication-quality Table 1 generator",
+            "features": ["Input: data array + group column", "Continuous: mean±SD or median(IQR) based on normality", "Categorical: n(%)", "P-values: t-test/Wilcoxon or chi-squared/Fisher", "HTML table output, CSV export"]
+          }
+        },
+        "webr_config": {
+          "packages": ["stats", "MASS", "survival", "lme4", "ggplot2", "dplyr", "tidyr", "broom", "pROC", "meta", "boot", "car", "psych", "epiR", "PropCIs"],
+          "tasks": ["Configure quarto-live for WebR", "Create shared R setup with helper functions", "Verify WebR loads and executes R code in browser"]
+        },
+        "quality_gates": [
+          "All OJS modules import correctly in a test .qmd",
+          "stat-engine.js t-test matches R t.test() within 1e-6",
+          "plot-factory.js produces valid SVG output",
+          "WebR loads and runs t.test(rnorm(100)) in browser"
+        ]
+      },
+      {
+        "id": "003",
+        "title": "Sample Datasets",
+        "phase": "foundation",
+        "prerequisites": ["001"],
+        "datasets": [
+          {"filename": "clinical_trial.csv", "n": 500, "description": "RCT Drug A vs Placebo for HTN", "columns": ["patient_id", "age", "sex", "race", "bmi", "baseline_sbp", "baseline_dbp", "treatment_group", "week4_sbp", "week4_dbp", "week8_sbp", "week8_dbp", "week12_sbp", "week12_dbp", "adverse_event", "adherence_pct", "dropout", "dropout_week"]},
+          {"filename": "survival_data.csv", "n": 800, "description": "Oncology survival", "columns": ["stage", "tumor_grade", "treatment", "time_to_event", "event", "ecog", "tumor_size", "lymph_nodes", "comorbidity_index"]},
+          {"filename": "longitudinal_study.csv", "n": "300x6=1800", "description": "HbA1c diabetes monitoring, 6 visits, medication groups"},
+          {"filename": "case_control.csv", "n": 400, "description": "MI risk factors, 200 cases + 200 controls"},
+          {"filename": "rct_parallel.csv", "n": 600, "description": "3-arm pain RCT: Drug A/B/Placebo"},
+          {"filename": "diagnostic_test.csv", "n": 1000, "description": "Biomarker evaluation with gold standard"},
+          {"filename": "meta_analysis_studies.csv", "n": "25 studies", "description": "Study-level meta-analysis data"},
+          {"filename": "multivariate_clinical.csv", "n": 1000, "description": "Large clinical dataset with LOS, ICU, labs"}
+        ],
+        "generation": "Julia script (scripts/generate_datasets.jl) with fixed seed, realistic correlations, <5% missing. DATA_DICTIONARY.md with full variable descriptions.",
+        "validation": "R reference scripts (scripts/validate_webr.R) compute reference values for all tests → test/reference_values.json",
+        "quality_gates": ["No impossible values", "Clinically plausible correlations", "Loadable via CSV.read() and read.csv()", "Reference values generated"]
+      },
+      {
+        "id": "004",
+        "title": "Landing Page & Appendices",
+        "phase": "foundation",
+        "prerequisites": ["001", "002", "003"],
+        "tasks": {
+          "index.qmd": "Full landing page: title, Who This Book Is For, 4 tier cards, How to Use This Book (3 computation layers), Interactive Features teaser demo, Prerequisites, navigation to Ch1",
+          "glossary.qmd": "500+ statistical terms as Quarto definition lists, searchable, cross-referenced to introducing chapters",
+          "formula-reference.qmd": "All key formulas by chapter, LaTeX rendered, linked back to source sections",
+          "test-decision-tree.qmd": "OJS-powered interactive test selector: outcome type → groups → paired? → assumptions → recommended test + chapter link",
+          "r-code-reference.qmd": "WebR code cookbook — common R patterns, copy-paste ready",
+          "datasets.qmd": "Dataset documentation with download links and preview tables"
+        },
+        "quality_gates": ["All appendix pages render", "Glossary links to correct chapters", "Test decision tree produces correct recommendations", "R cookbook examples execute in WebR"]
+      }
+    ],
+
+    "chapters_beginner": [
+      {
+        "id": "010",
+        "title": "Ch1: Types of Data and Measurement Scales",
+        "chapter_number": 1,
+        "tier": "beginner",
+        "file": "chapters/beginner/01-data-types.qmd",
+        "prerequisites": [],
+        "estimated_time_minutes": 45,
+        "dataset": "clinical_trial.csv",
+        "content": [
+          "1.1 Why measurement scales matter (determines test choice)",
+          "1.2 Nominal (blood type, diagnosis; mode, frequencies, chi-squared)",
+          "1.3 Ordinal (cancer stage, NYHA, GCS, APGAR; median, IQR)",
+          "1.4 Interval (temperature, IQ; no true zero; mean, SD)",
+          "1.5 Ratio (weight, BP, labs; true zero; geometric mean for log-normal)",
+          "1.6 Special types (binary, count/Poisson, time-to-event, compositional)",
+          "1.7 Decision framework flowchart + variable-to-test mapping table"
+        ],
+        "ojs_demos": [
+          {"title": "Classification Game", "description": "20 clinical variables appear, user selects type, scored"},
+          {"title": "Distribution Shape Explorer", "description": "Select column from sample data, auto-detect type, histogram or bar with summary stats"},
+          {"title": "Wrong Test Detector", "description": "Run inappropriate test, show why result is meaningless"},
+          {"title": "Variable Audit", "description": "Auto-classify all variables in uploaded dataset, override, export codebook"}
+        ],
+        "webr_analysis": "Upload CSV → auto-classify columns → verify/override types → codebook → variable summary dashboard",
+        "exercises": {"count": 5, "types": ["classify from abstract", "identify misclassified", "match to tests", "critique analysis"]}
+      },
+      {
+        "id": "011",
+        "title": "Ch2: Descriptive Statistics",
+        "chapter_number": 2,
+        "tier": "beginner",
+        "file": "chapters/beginner/02-descriptive.qmd",
+        "prerequisites": [1],
+        "estimated_time_minutes": 60,
+        "dataset": "clinical_trial.csv",
+        "content": ["Central tendency (arithmetic/geometric/harmonic/trimmed/weighted mean, median, mode)", "Dispersion (range, IQR, variance, SD, CV, MAD)", "Percentiles/box plots", "Distribution shape (skewness, kurtosis)", "Frequency tables/cross-tabs", "The Table 1 in medical papers"],
+        "key_equations": ["x̄ = (1/n)Σxᵢ", "s² = (1/(n-1))Σ(xᵢ-x̄)²", "CV = s/x̄ × 100%", "IQR = Q₃ - Q₁"],
+        "ojs_demos": [
+          {"title": "Mean-Median-Mode Machine", "description": "Adjustable distribution + outlier slider, watch mean shift while median stays stable"},
+          {"title": "SD Intuition Builder", "description": "Same mean, different SD via slider"},
+          {"title": "Box Plot Anatomy Lab", "description": "Hover components, toggle violin/swarm/raincloud"},
+          {"title": "Table 1 Generator", "description": "Select variables + grouping, publication-quality table, toggle mean vs median, p-values on/off"}
+        ],
+        "webr_analysis": "Upload → comprehensive descriptive report + distribution explorer + normality testing + Table 1"
+      },
+      {
+        "id": "012",
+        "title": "Ch3: Probability Foundations",
+        "chapter_number": 3,
+        "tier": "beginner",
+        "file": "chapters/beginner/03-probability.qmd",
+        "prerequisites": [1, 2],
+        "estimated_time_minutes": 75,
+        "dataset": "diagnostic_test.csv",
+        "content": ["Probability rules (addition, multiplication, conditional)", "Bayes' theorem for diagnostic tests (PPV/NPV/LR)", "Distributions intro (Binomial, Poisson, Normal, Log-Normal, Exponential)", "Normal deep dive (Z-scores, CLT, QQ plots)", "Clinical decision analysis"],
+        "ojs_demos": [
+          {"title": "Bayes' Theorem Visualizer", "description": "Sliders: prevalence, sensitivity, specificity → Fagan nomogram + 1000-patient icon array (TP/FP/TN/FN)"},
+          {"title": "Distribution Explorer", "description": "Dropdown distribution type, parameter sliders, PDF/CDF side by side"},
+          {"title": "CLT Simulator", "description": "Draw samples from any distribution, animated convergence to Normal — THE signature demo"},
+          {"title": "Screening Test Evaluator", "description": "Input sens/spec/prev → icon array + 2×2 table + all diagnostic metrics"}
+        ],
+        "webr_analysis": "Upload diagnostic data → 2×2 table → Sens/Spec/PPV/NPV/ROC/AUC/optimal cutpoint → distribution fitting"
+      },
+      {
+        "id": "013",
+        "title": "Ch4: Sampling and Study Design",
+        "chapter_number": 4,
+        "tier": "beginner",
+        "file": "chapters/beginner/04-sampling-design.qmd",
+        "prerequisites": [1, 2, 3],
+        "estimated_time_minutes": 90,
+        "dataset": "case_control.csv",
+        "content": ["Study design hierarchy (cross-sectional/case-control/cohort/RCT/N-of-1)", "Sampling methods (random/stratified/cluster/systematic/convenience)", "Bias taxonomy (selection/information/confounding/lead-time/immortal-time/ecological fallacy)", "Randomization methods", "Sample size introduction", "Reporting guidelines (SPIRIT/STROBE/CONSORT/PRISMA/STARD)"],
+        "ojs_demos": [
+          {"title": "Study Design Decision Tree", "description": "Answer questions about research goal → recommended design + checklist"},
+          {"title": "Sampling Simulator", "description": "10K-dot population, compare sampling methods, show bias + precision"},
+          {"title": "Bias Illustrated", "description": "6 interactive scenarios with DAGs and mitigation"},
+          {"title": "Randomization Validator", "description": "Simulate randomization, show covariate balance (Love plot)"}
+        ],
+        "webr_analysis": "Study Design Advisor; Covariate Balance Checker"
+      },
+      {
+        "id": "014",
+        "title": "Ch5: Confidence Intervals",
+        "chapter_number": 5,
+        "tier": "beginner",
+        "file": "chapters/beginner/05-confidence-intervals.qmd",
+        "prerequisites": [1, 2, 3],
+        "estimated_time_minutes": 60,
+        "dataset": "clinical_trial.csv",
+        "content": ["Correct interpretation (and 3 common wrong ones)", "CI for mean (Z vs t)", "CI for proportion (Wald/Wilson/Agresti-Coull/Clopper-Pearson)", "CI for differences and ratios (means/proportions/OR/RR/HR/NNT)", "Bootstrap CIs (percentile/BCa)", "CI width, precision, sample size", "Reporting (ICMJE)"],
+        "ojs_demos": [
+          {"title": "CI Interpretation Simulator", "description": "Draw 100 CIs, ~5 miss true parameter, toggle 90/95/99%"},
+          {"title": "CI Width Explorer", "description": "3 sliders: n, confidence level, SD"},
+          {"title": "Bootstrap CI Machine", "description": "Animated resampling, build distribution, show percentile + BCa"},
+          {"title": "Forest Plot Builder", "description": "Add/remove studies, see pooled estimate change"}
+        ],
+        "webr_analysis": "CI Calculator (parametric + bootstrap); Precision-Based Sample Size"
+      },
+      {
+        "id": "015",
+        "title": "Ch6: Hypothesis Testing Framework",
+        "chapter_number": 6,
+        "tier": "beginner",
+        "file": "chapters/beginner/06-hypothesis-testing.qmd",
+        "prerequisites": [1, 2, 3, 5],
+        "estimated_time_minutes": 90,
+        "dataset": "clinical_trial.csv",
+        "content": ["Logic of hypothesis testing (Fisher/Neyman-Pearson)", "Type I/II errors (clinical consequences)", "P-value (correct definition, 5 misinterpretations, ASA 2016)", "One-tailed vs two-tailed", "Multiple testing (FWER/FDR, Bonferroni/Holm/Hochberg/BH)", "Statistical vs clinical significance (MCID, effect sizes, superiority/non-inferiority/equivalence)"],
+        "ojs_demos": [
+          {"title": "Hypothesis Test Visualizer", "description": "Two overlapping Normals (H₀/H₁), shade α/β/power regions, sliders: μ₀, μ₁, σ, n, α — THE key demo"},
+          {"title": "P-Value Simulator", "description": "10,000 experiments under H₀ (uniform) vs H₁ (right-skewed)"},
+          {"title": "Multiple Testing Disaster", "description": "20 tests on random data, show false positives, apply corrections"},
+          {"title": "Clinical Significance Detector", "description": "CI relative to zero AND MCID, four outcome zones"}
+        ],
+        "webr_analysis": "Hypothesis Test Advisor; P-Value Context Report (effect size + CI + power)"
+      },
+      {
+        "id": "016",
+        "title": "Ch7: Visualizing Medical Data",
+        "chapter_number": 7,
+        "tier": "beginner",
+        "file": "chapters/beginner/07-visualization.qmd",
+        "prerequisites": [1, 2],
+        "estimated_time_minutes": 75,
+        "dataset": "clinical_trial.csv",
+        "content": ["Tufte principles (data-ink ratio, chartjunk, lie factor)", "Cleveland hierarchy", "Accessible color palettes", "Univariate (histogram/density/box/violin/raincloud/bar)", "Bivariate (scatter/grouped box/mosaic/line/Bland-Altman)", "Multivariate (pairs/heatmap/parallel coords/PCA biplot/facets)", "Clinical specialized (forest/KM/ROC/funnel/CONSORT/nomogram/DCA)", "Common mistakes (truncated axis, dual axis, pie charts, 3D, rainbow)", "Publication standards (300 DPI, vector vs raster)"],
+        "ojs_demos": [
+          {"title": "Plot Type Chooser", "description": "Interactive decision tree → recommended plot"},
+          {"title": "Visualization Playground", "description": "Select variables, map aesthetics, choose type, customize theme/palette — live Observable Plot"},
+          {"title": "Lie Factor Calculator", "description": "Input true ratio + visual ratio → compute lie factor"},
+          {"title": "Clinical Plot Gallery", "description": "20+ clinical plot types with live examples"}
+        ],
+        "webr_analysis": "Auto-Visualization (recommended plots for all variables); Custom Figure Builder with ggplot2"
+      }
+    ],
+
+    "chapters_intermediate": [
+      {
+        "id": "020", "title": "Ch8: The t-Test Family", "chapter_number": 8, "tier": "intermediate",
+        "file": "chapters/intermediate/08-t-tests.qmd", "prerequisites": [2, 5, 6], "dataset": "clinical_trial.csv",
+        "content": ["One-sample t (vs benchmark)", "Independent two-sample t", "Welch's t (default)", "Paired t", "Assumptions (normality, independence, equal variance)", "Effect sizes (Cohen's d, Hedges' g, CLES)", "Nonparametric alternatives (Wilcoxon SR, Mann-Whitney U)", "Equivalence testing (TOST)", "APA reporting"],
+        "ojs_demos": [
+          {"title": "t-Distribution Explorer", "description": "Adjust df"},
+          {"title": "Two-Group Comparator", "description": "Drag distributions"},
+          {"title": "Paired vs Independent", "description": "Power comparison"},
+          {"title": "Assumption Violation Simulator", "description": "Type I error rates under violation"},
+          {"title": "Equivalence Testing Visualizer", "description": "TOST step-by-step"}
+        ],
+        "webr_analysis": "Compare Two Groups (full workflow); Pre-Post Analysis (paired + effect size)",
+        "validation": "p-values match R t.test() within 1e-10"
+      },
+      {
+        "id": "021", "title": "Ch9: Chi-Squared and Categorical Data", "chapter_number": 9, "tier": "intermediate",
+        "file": "chapters/intermediate/09-chi-squared.qmd", "prerequisites": [1, 3, 6], "dataset": "case_control.csv",
+        "content": ["Goodness-of-fit", "Independence", "Fisher exact", "McNemar", "Association measures (OR/RR/phi/Cramer's V)", "Stratified analysis (Mantel-Haenszel)", "Cochran-Armitage trend test"],
+        "ojs_demos": [{"title": "2×2 Table Laboratory"}, {"title": "Expected vs Observed Animation"}, {"title": "OR vs RR Clarifier"}, {"title": "Simpson's Paradox"}],
+        "webr_analysis": "Cross-Tabulation Analyzer; Risk Calculator (OR/RR/ARR/NNT with CIs)"
+      },
+      {
+        "id": "022", "title": "Ch10: ANOVA", "chapter_number": 10, "tier": "intermediate",
+        "file": "chapters/intermediate/10-anova.qmd", "prerequisites": [8], "dataset": "rct_parallel.csv",
+        "content": ["One-way ANOVA", "Post-hoc (Tukey/Dunnett/Scheffé)", "Two-way factorial", "Repeated measures", "ANCOVA", "Assumptions (sphericity)", "Kruskal-Wallis/Friedman", "Effect sizes (η²/partial η²/ω²)", "Planned contrasts", "Mixed ANOVA"],
+        "ojs_demos": [{"title": "ANOVA Decomposition", "description": "SS bars"}, {"title": "Post-Hoc Comparison Matrix"}, {"title": "Interaction Plot Builder"}, {"title": "Sphericity Explorer"}, {"title": "ANCOVA vs No Adjustment"}],
+        "webr_analysis": "Multi-Group Comparison Pipeline; Repeated Measures Analyzer"
+      },
+      {
+        "id": "023", "title": "Ch11: Correlation", "chapter_number": 11, "tier": "intermediate",
+        "file": "chapters/intermediate/11-correlation.qmd", "prerequisites": [2, 6, 7], "dataset": "multivariate_clinical.csv",
+        "content": ["Pearson", "Spearman", "Kendall tau", "Point-biserial", "Partial correlation", "Correlation ≠ causation", "Correlation matrix + multicollinearity", "ICC", "Concordance correlation"],
+        "ojs_demos": [{"title": "Anscombe's Quartet + Datasaurus Dozen"}, {"title": "Correlation Guesser Game"}, {"title": "Partial Correlation Revealer"}, {"title": "ICC Calculator"}],
+        "webr_analysis": "Correlation Matrix Explorer (heatmap + significance); Agreement Analysis (ICC + Bland-Altman)"
+      },
+      {
+        "id": "024", "title": "Ch12: Linear Regression", "chapter_number": 12, "tier": "intermediate",
+        "file": "chapters/intermediate/12-linear-regression.qmd", "prerequisites": [8, 11], "dataset": "multivariate_clinical.csv",
+        "content": ["Simple linear", "OLS derivation", "Coefficient interpretation", "R²/adjusted R²", "Residual diagnostics (4-panel)", "Multiple regression", "Categorical predictors", "Interactions", "Polynomial", "Variable selection (forward/backward/AIC)", "Multicollinearity (VIF)", "Influential observations (Cook's D, leverage, DFBETAS)", "Standardized coefficients"],
+        "ojs_demos": [{"title": "Fit the Line", "description": "Drag points, live regression"}, {"title": "Residual Diagnostic Dashboard"}, {"title": "Multicollinearity Detector"}, {"title": "Variable Selection Race"}, {"title": "Influential Point Laboratory"}],
+        "webr_analysis": "Regression Modeler; Diagnostic Report; Model Comparison (AIC/BIC/R²)"
+      },
+      {
+        "id": "025", "title": "Ch13: Logistic Regression", "chapter_number": 13, "tier": "intermediate",
+        "file": "chapters/intermediate/13-logistic-regression.qmd", "prerequisites": [9, 12], "dataset": "case_control.csv",
+        "content": ["Why not linear for binary", "Logistic function/log-odds", "Simple/multiple logistic", "OR interpretation", "Confounding adjustment", "Diagnostics (Hosmer-Lemeshow/ROC/calibration)", "Ordinal/multinomial", "Penalized (Ridge/LASSO/Elastic Net)", "Clinical prediction models"],
+        "ojs_demos": [{"title": "Logistic Curve Fitter"}, {"title": "OR Forest Plot"}, {"title": "ROC Curve Builder"}, {"title": "Calibration Plot"}, {"title": "LASSO Variable Selector", "description": "Lambda slider → coefficient path"}],
+        "webr_analysis": "Binary Outcome Modeler; Risk Score Builder; Discrimination/Calibration Report"
+      },
+      {
+        "id": "026", "title": "Ch14: Non-Parametric Methods", "chapter_number": 14, "tier": "intermediate",
+        "file": "chapters/intermediate/14-nonparametric.qmd", "prerequisites": [8, 9, 10], "dataset": "clinical_trial.csv",
+        "content": ["When to go nonparametric", "Wilcoxon SR", "Mann-Whitney U", "Kruskal-Wallis", "Friedman", "Permutation tests", "Sign test", "Rank-based effect sizes", "Power comparison"],
+        "ojs_demos": [{"title": "Ranking Machine"}, {"title": "Parametric vs Non-Parametric Face-Off"}, {"title": "Permutation Test Visualizer"}, {"title": "Power Comparison Simulation"}],
+        "webr_analysis": "Non-Parametric Test Suite; Parametric vs Non-Parametric Comparison"
+      },
+      {
+        "id": "027", "title": "Ch15: Power and Sample Size", "chapter_number": 15, "tier": "intermediate",
+        "file": "chapters/intermediate/15-power-sample-size.qmd", "prerequisites": [6, 8, 9, 12, 13],
+        "content": ["Power framework (α, β, δ, n)", "Power for all test types", "MCID determination", "Adjustments (dropout/non-compliance/multiple testing/clustering)", "Simulation-based power", "Post-hoc power fallacy", "Grant writing sample size section"],
+        "ojs_demos": [{"title": "Power Calculator Suite"}, {"title": "Power Curves (n vs power)"}, {"title": "Monte Carlo Simulation Power"}, {"title": "Budget vs Power Trade-off"}, {"title": "Post-Hoc Power Fallacy"}],
+        "webr_analysis": "Power Analysis Report from pilot data; Sensitivity Analysis"
+      },
+      {
+        "id": "028", "title": "Ch16: Bayesian Thinking", "chapter_number": 16, "tier": "intermediate",
+        "file": "chapters/intermediate/16-bayesian-thinking.qmd", "prerequisites": [3, 5, 6],
+        "content": ["Frequentist vs Bayesian philosophy", "Prior/likelihood/posterior", "Conjugate priors (Beta-Binomial, Normal-Normal)", "Credible intervals vs CIs", "Choosing priors", "Bayesian A/B testing", "Adaptive trial designs", "MCMC intuition", "Bayesian vs frequentist comparison"],
+        "ojs_demos": [{"title": "Prior-to-Posterior Updater", "description": "Beta-Binomial with sliders — THE signature Bayesian demo"}, {"title": "Beta-Binomial Clinical Trial"}, {"title": "MCMC Visualizer"}, {"title": "Bayesian vs Frequentist Face-Off"}, {"title": "Prior Sensitivity Analysis"}],
+        "webr_analysis": "Bayesian Proportion Comparison; Bayesian Mean Comparison"
+      }
+    ],
+
+    "chapters_advanced": [
+      {
+        "id": "030", "title": "Ch17: Survival Analysis", "chapter_number": 17, "tier": "advanced",
+        "file": "chapters/advanced/17-survival.qmd", "prerequisites": [6, 12, 13], "dataset": "survival_data.csv",
+        "content": ["Censoring types", "Kaplan-Meier", "Life table", "Log-rank", "Cox PH", "Hazard ratio interpretation", "PH assumption (Schoenfeld)", "Time-varying covariates", "Competing risks (Fine-Gray)", "Parametric models", "RMST", "Sample size (Schoenfeld formula)"],
+        "ojs_demos": [{"title": "KM Builder"}, {"title": "Cox Dashboard"}, {"title": "PH Assumption Checker"}, {"title": "Competing Risks Visualizer"}, {"title": "Censoring Impact Demonstrator"}],
+        "webr_analysis": "Survival Pipeline (KM + log-rank + Cox via survival package); Competing Risks"
+      },
+      {
+        "id": "031", "title": "Ch18: Mixed-Effects Models", "chapter_number": 18, "tier": "advanced",
+        "file": "chapters/advanced/18-mixed-effects.qmd", "prerequisites": [10, 12], "dataset": "longitudinal_study.csv",
+        "content": ["Why standard regression fails for clustered data", "Fixed vs random effects", "Random intercepts/slopes", "Crossed/nested", "Model selection (REML/ML/LRT/AIC/BIC)", "GLMM", "Diagnostics", "Missing data in longitudinal"],
+        "ojs_demos": [{"title": "Spaghetti Plot + Mixed Model"}, {"title": "Random Effects Forest Plot"}, {"title": "ICC Calculator"}, {"title": "Missing Data Impact"}],
+        "webr_analysis": "Longitudinal Analysis Pipeline (via lme4); Clustering Assessment"
+      },
+      {
+        "id": "032", "title": "Ch19: GLM Extensions", "chapter_number": 19, "tier": "advanced",
+        "file": "chapters/advanced/19-glm-extensions.qmd", "prerequisites": [12, 13], "dataset": "multivariate_clinical.csv",
+        "content": ["GLM framework", "Poisson", "Overdispersion/negative binomial", "Zero-inflated", "Gamma (costs/LOS)", "Beta (proportions)", "Quantile regression", "Robust regression"],
+        "ojs_demos": [{"title": "Link Function Visualizer"}, {"title": "Poisson vs NB"}, {"title": "Zero-Inflation Detector"}, {"title": "GLM Family Comparator"}],
+        "webr_analysis": "Count Data Modeler; Cost/Utilization Analysis"
+      },
+      {
+        "id": "033", "title": "Ch20: Meta-Analysis", "chapter_number": 20, "tier": "advanced",
+        "file": "chapters/advanced/20-meta-analysis.qmd", "prerequisites": [5, 6, 12], "dataset": "meta_analysis_studies.csv",
+        "content": ["PRISMA 2020", "Effect size computation", "Fixed-effect/Random-effects", "Heterogeneity (Q/I²/τ²)", "Forest plots", "Publication bias (funnel/Egger/trim-and-fill)", "Subgroup/meta-regression", "Network meta-analysis", "GRADE"],
+        "ojs_demos": [{"title": "Forest Plot Studio"}, {"title": "Heterogeneity Explorer"}, {"title": "Funnel Plot Detective"}, {"title": "Fixed vs Random"}, {"title": "Meta-Regression"}],
+        "webr_analysis": "Meta-Analysis Pipeline (via meta/metafor in WebR); Publication Bias Assessment"
+      },
+      {
+        "id": "034", "title": "Ch21: Diagnostic Test Evaluation", "chapter_number": 21, "tier": "advanced",
+        "file": "chapters/advanced/21-diagnostic-tests.qmd", "prerequisites": [3, 13], "dataset": "diagnostic_test.csv",
+        "content": ["Sens/Spec deep dive", "Likelihood ratios", "ROC/AUC", "Optimal cutpoint", "Comparing tests (DeLong)", "NRI/IDI", "Decision curve analysis", "STARD"],
+        "ojs_demos": [{"title": "ROC Interactive"}, {"title": "LR Nomogram"}, {"title": "Decision Curve Analysis"}, {"title": "Prediction Rule Validator"}],
+        "webr_analysis": "STARD-Compliant Evaluator (via pROC); Prediction Model Validator"
+      },
+      {
+        "id": "035", "title": "Ch22: Missing Data", "chapter_number": 22, "tier": "advanced",
+        "file": "chapters/advanced/22-missing-data.qmd", "prerequisites": [12, 13, 18],
+        "content": ["MCAR/MAR/MNAR", "Consequences of ignoring", "Complete case analysis", "MICE + Rubin's rules", "EM/FIML", "Sensitivity analysis (tipping point)", "Missing in trials (ITT/estimand)"],
+        "ojs_demos": [{"title": "Mechanism Visualizer"}, {"title": "Imputation Comparator"}, {"title": "Rubin's Rules Calculator"}, {"title": "Tipping Point"}],
+        "webr_analysis": "Missing Data Diagnostic; MICE Pipeline with Pooled Results (via mice)"
+      },
+      {
+        "id": "036", "title": "Ch23: Causal Inference", "chapter_number": 23, "tier": "advanced",
+        "file": "chapters/advanced/23-causal-inference.qmd", "prerequisites": [4, 12, 13],
+        "content": ["Confounding", "Potential outcomes (Rubin)", "DAGs", "PS methods (matching/IPTW)", "Balance assessment (Love plots)", "Sensitivity (E-value)", "Instrumental variables", "DiD", "RDD"],
+        "ojs_demos": [{"title": "DAG Builder"}, {"title": "PS Matching Visualizer"}, {"title": "Balance Before/After"}, {"title": "E-Value Calculator"}],
+        "webr_analysis": "PS Analysis Pipeline (via MatchIt); Causal Diagram Analyzer"
+      },
+      {
+        "id": "037", "title": "Ch24: Multivariable Model Building", "chapter_number": 24, "tier": "advanced",
+        "file": "chapters/advanced/24-model-building.qmd", "prerequisites": [12, 13, 17, 18], "dataset": "multivariate_clinical.csv",
+        "content": ["Prediction vs explanation vs causal", "Variable selection", "Splines/fractional polynomials", "Overfitting/bias-variance", "Internal validation (CV/bootstrap)", "External validation", "Nomograms", "TRIPOD"],
+        "ojs_demos": [{"title": "Overfitting Demonstrator"}, {"title": "Spline Fitter"}, {"title": "Cross-Validation Visualizer"}, {"title": "Nomogram Builder"}],
+        "webr_analysis": "Guided Model Building Workshop; Model Validation Report"
+      },
+      {
+        "id": "038", "title": "Ch25: Advanced Longitudinal Methods", "chapter_number": 25, "tier": "advanced",
+        "file": "chapters/advanced/25-advanced-longitudinal.qmd", "prerequisites": [10, 18], "dataset": "longitudinal_study.csv",
+        "content": ["GEE", "GEE vs mixed models", "Correlation structures", "Growth curve models", "Latent class growth", "Joint models", "Handling dropout"],
+        "ojs_demos": [{"title": "GEE vs Mixed Model"}, {"title": "Correlation Structure Selector"}, {"title": "Growth Curve Animator"}, {"title": "Joint Model Visualizer"}],
+        "webr_analysis": "GEE Pipeline (via geepack); Trajectory Analysis"
+      },
+      {
+        "id": "039", "title": "Ch26: High-Dimensional Data and ML", "chapter_number": 26, "tier": "advanced",
+        "file": "chapters/advanced/26-high-dimensional-ml.qmd", "prerequisites": [6, 12, 13, 15],
+        "content": ["Multiple testing at genomics scale", "FWER/FDR", "PCA/Factor analysis", "Cluster analysis", "Supervised ML (random forests/gradient boosting/SVM)", "Cross-validation", "Variable importance (SHAP)", "ML vs traditional statistics", "TRIPOD-ML"],
+        "ojs_demos": [{"title": "FDR Visualizer"}, {"title": "PCA Explorer"}, {"title": "Cluster Explorer"}, {"title": "Random Forest Explainer"}, {"title": "SHAP Dashboard"}],
+        "webr_analysis": "High-Dimensional Pipeline (PCA + clustering); ML Prediction Model"
+      }
+    ],
+
+    "chapters_expert": [
+      {
+        "id": "040", "title": "Ch27: Clinical Trial Design", "chapter_number": 27, "tier": "expert",
+        "file": "chapters/expert/27-clinical-trial-design.qmd", "prerequisites": [4, 6, 15, 17], "dataset": "clinical_trial.csv",
+        "content": ["Phase I-IV", "Adaptive (group sequential/SSR)", "Non-inferiority/equivalence", "Crossover", "Cluster RCT", "Factorial", "Platform/basket/umbrella", "Bayesian adaptive", "Interim analysis", "SAP structure", "Estimand framework (ICH E9(R1))"],
+        "ojs_demos": [{"title": "Trial Designer"}, {"title": "Group Sequential Boundaries"}, {"title": "NI Margin Explorer"}, {"title": "Adaptive Simulator"}, {"title": "Estimand Builder"}],
+        "webr_analysis": "Trial Data Analyzer; SAP Template Generator"
+      },
+      {
+        "id": "041", "title": "Ch28: Advanced Survival Methods", "chapter_number": 28, "tier": "expert",
+        "file": "chapters/expert/28-advanced-survival.qmd", "prerequisites": [17, 18],
+        "content": ["Competing risks (cause-specific vs sub-distribution)", "Frailty models", "AFT", "Joint models", "RMST", "Multi-state", "Recurrent events", "Cure models", "Dynamic prediction"]
+      },
+      {
+        "id": "042", "title": "Ch29: Bayesian Clinical Trials", "chapter_number": 29, "tier": "expert",
+        "file": "chapters/expert/29-bayesian-trials.qmd", "prerequisites": [16, 27],
+        "content": ["Bayesian trial design", "Adaptive randomization", "Hierarchical models", "Bayesian NMA", "Bayesian sample size", "MCMC diagnostics", "Prior elicitation", "FDA guidance"]
+      },
+      {
+        "id": "043", "title": "Ch30: Putting It All Together", "chapter_number": 30, "tier": "expert",
+        "file": "chapters/expert/30-putting-it-together.qmd", "prerequisites": "ALL",
+        "content": ["PICOT/FINER", "Study design selection (master decision tree)", "Sample size justification", "EDA workflow", "Statistical method selection", "Publication tables/figures", "Writing methods/results", "Responding to reviewers", "Reproducible research"],
+        "ojs_demos": [{"title": "Statistical Method Selector"}, {"title": "Methods Section Writer"}, {"title": "Results Section Writer"}, {"title": "Reviewer Response Helper"}, {"title": "Full Analysis Walkthrough"}],
+        "webr_analysis": "Complete Pipeline (upload → EDA → test selection → analysis → report); Publication Package Generator"
+      }
+    ],
+
+    "integration": [
+      {
+        "id": "050", "title": "Cross-Chapter Assembly & Navigation", "phase": "integration",
+        "prerequisites": ["all chapter prompts"],
+        "tasks": ["Finalize _quarto.yml chapter listing", "Verify all cross-references resolve", "Verify search index", "Add Key Concepts callouts linking prerequisites", "Add Next Steps sections", "Verify all OJS imports and WebR blocks", "Full quarto render — all 30 chapters + appendices", "Fix broken references"]
+      },
+      {
+        "id": "051", "title": "Assessment & Progress System", "phase": "integration",
+        "prerequisites": ["050"],
+        "tasks": ["Create assets/js/progress-tracker.js (localStorage)", "Track chapter completion + exercise scores", "Create progress-dashboard.qmd appendix", "Add placement quiz to index.qmd (10 questions → recommended chapter)"]
+      },
+      {
+        "id": "052", "title": "Performance & Polish", "phase": "integration",
+        "prerequisites": ["051"],
+        "tasks": ["Lazy-load WebR only on chapters that use it", "Bundle/minify OJS modules", "Lighthouse audit (Performance >80, Accessibility >90)", "Image optimization", "Social meta tags", "Analytics snippet", "Dark mode + mobile verification"]
+      },
+      {
+        "id": "053", "title": "Multi-Format Export & Documentation", "phase": "integration",
+        "prerequisites": ["052"],
+        "tasks": ["Configure PDF export via quarto render --to pdf", "Create CONTRIBUTING.md, ARCHITECTURE.md, README.md", "Generate complete textbook PDF", "Verify EPUB output"]
+      }
+    ],
+
+    "qa_deploy": [
+      {
+        "id": "060", "title": "Render Validation & Link Checking", "phase": "qa",
+        "tasks": ["quarto render all chapters without errors", "Verify all cross-references resolve", "Check all internal/external links", "Verify all OJS demos load", "Verify all WebR blocks execute", "Create test/validate_renders.sh"]
+      },
+      {
+        "id": "061", "title": "Statistical Validation", "phase": "qa",
+        "tasks": ["Run scripts/validate_webr.R — R reference for every test", "Compare WebR results against test/reference_values.json", "Tolerance: p-value 1e-10, effect size 1e-6", "Verify OJS stat-engine.js matches R for basic tests", "Create validation report"]
+      },
+      {
+        "id": "062", "title": "Accessibility & Mobile Audit", "phase": "qa",
+        "tasks": ["Lighthouse audit (Performance >80, Accessibility >90)", "Screen reader compatibility", "Keyboard navigation", "Color contrast (WCAG AA)", "Mobile layout verification", "MathJax ARIA labels", "Alt text for all images"]
+      },
+      {
+        "id": "063", "title": "Deployment", "phase": "deployment",
+        "tasks": ["Create GitHub repo timothyhartzog/BiostatTextbook", "Push all source files", "quarto publish gh-pages", "GitHub Actions workflow (render + deploy on push to main)", "Custom domain if desired", "Verify deployed site", "Release tag v1.0.0"]
+      }
+    ]
+  },
+
+  "orchestrator": {
+    "script": "orchestrator.sh",
+    "phases": [
+      {"name": "Foundation", "execution": "sequential", "prompts": ["001", "002", "003", "004"], "validation": "quarto render --to html"},
+      {"name": "Chapters", "execution": "parallel", "max_concurrent": 10, "source": "prompts/chapters/*.md"},
+      {"name": "Integration", "execution": "sequential", "prompts": ["050", "051", "052", "053"]},
+      {"name": "QA & Deploy", "execution": "sequential", "prompts": ["060", "061", "062", "063"], "final": "quarto render"}
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+_publish/
+_freeze/
+.quarto/
+build/
+*.html
+!index.qmd
+node_modules/
+.DS_Store
