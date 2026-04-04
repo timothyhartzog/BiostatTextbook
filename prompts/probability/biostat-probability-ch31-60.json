@@ -1,0 +1,973 @@
+{
+  "project": {
+    "name": "Probability for Physician Researchers",
+    "description": "30-chapter interactive probability textbook expansion (Ch31-60) for the BiostatTextbook Quarto project. Covers foundational through advanced probability with heavy emphasis on interactive Observable JS calculators and visualizations.",
+    "version": "1.0.0",
+    "date": "2026-04-03",
+    "total_prompts": 34,
+    "total_chapters": 30,
+    "chapter_range": "31–60",
+    "framework": "Quarto Book + Observable JS + WebR",
+    "parent_project": "BiostatTextbook"
+  },
+
+  "integration_notes": {
+    "quarto_yml_addition": "Add a new Part 'Probability' to _quarto.yml after the existing Expert part, before Appendices",
+    "file_location": "chapters/probability/",
+    "numbering": "Chapters 31-60 continue numbering from the existing 30 chapters",
+    "shared_modules": "Reuse existing assets/js/ modules (stat-engine.js, plot-factory.js, etc.) plus new probability-specific modules",
+    "new_modules_needed": [
+      "assets/js/prob-engine.js — combinatorics, distributions, Markov chains, stochastic processes",
+      "assets/js/prob-plots.js — probability-specific visualizations (tree diagrams, Venn, urn models, Markov diagrams)",
+      "assets/js/simulation-engine.js — Monte Carlo, random walks, convergence animations"
+    ]
+  },
+
+  "agentic_workflow": {
+    "phase_1_foundation": {
+      "execution": "sequential",
+      "prompts": ["100", "101"],
+      "description": "Create probability-specific OJS modules + new sample datasets"
+    },
+    "phase_2_chapters": {
+      "execution": "parallel (up to 10 concurrent)",
+      "waves": {
+        "A": {"prompts": ["110", "111", "112"], "chapters": [31, 32, 33], "note": "no deps — pure foundations"},
+        "B": {"prompts": ["113", "114", "115"], "chapters": [34, 35, 36], "note": "need counting + conditional"},
+        "C": {"prompts": ["116", "117", "118"], "chapters": [37, 38, 39], "note": "need distributions"},
+        "D": {"prompts": ["120", "121", "122"], "chapters": [40, 41, 42], "note": "need random variables"},
+        "E": {"prompts": ["123", "124", "125"], "chapters": [43, 44, 45], "note": "need joint distributions"},
+        "F": {"prompts": ["126", "127", "128"], "chapters": [46, 47, 48], "note": "need convergence"},
+        "G": {"prompts": ["130", "131", "132"], "chapters": [49, 50, 51], "note": "stochastic processes"},
+        "H": {"prompts": ["133", "134", "135"], "chapters": [52, 53, 54], "note": "Bayesian + information"},
+        "I": {"prompts": ["136", "137", "138"], "chapters": [55, 56, 57], "note": "advanced applications"},
+        "J": {"prompts": ["139", "140", "141"], "chapters": [58, 59, 60], "note": "expert + capstone"}
+      }
+    },
+    "phase_3_integration": {
+      "execution": "sequential",
+      "prompts": ["150", "151"],
+      "description": "Merge into main book, cross-reference with existing Ch1-30"
+    }
+  },
+
+  "prompts": {
+    "foundation": [
+      {
+        "id": "100",
+        "title": "Probability OJS Modules & Datasets",
+        "phase": "foundation",
+        "prerequisites": ["Existing BiostatTextbook foundation (001-004)"],
+        "new_modules": {
+          "prob-engine.js": {
+            "description": "Probability-specific computation library extending stat-engine.js",
+            "features": [
+              "Combinatorics: factorial, permutations, combinations, multinomial coefficients, Stirling approximation, derangements",
+              "Set operations: union, intersection, complement, symmetric difference with probability calculations",
+              "Conditional probability: P(A|B) from joint/marginal, chain rule for n events",
+              "Bayes calculator: prior × likelihood → posterior, sequential updating for n observations",
+              "Discrete distributions: Bernoulli, Binomial, Geometric, Negative Binomial, Poisson, Hypergeometric, Discrete Uniform, Zipf, Multinomial — all with PMF, CDF, quantile, mean, variance, MGF",
+              "Continuous distributions: Uniform, Normal, Exponential, Gamma, Beta, Chi-squared, t, F, Weibull, Lognormal, Cauchy, Pareto, Logistic — all with PDF, CDF, quantile, mean, variance, MGF",
+              "Multivariate: bivariate Normal PDF/CDF, covariance matrix operations, Mahalanobis distance",
+              "Generating functions: PGF, MGF, characteristic function evaluation and inversion",
+              "Markov chains: transition matrix powers, stationary distribution, absorption probabilities, mean first passage time, classification (recurrent/transient/absorbing)",
+              "Random number generation: LCG, inverse transform, Box-Muller, acceptance-rejection (all visualizable)",
+              "Monte Carlo: importance sampling, stratified sampling, antithetic variates, control variates",
+              "Convergence: check convergence in probability, distribution, almost sure (via simulation)",
+              "Information theory: entropy, KL divergence, mutual information, Fisher information"
+            ]
+          },
+          "prob-plots.js": {
+            "description": "Probability-specific visualizations built on plot-factory.js",
+            "features": [
+              "Venn diagrams: 2-set and 3-set with proportional areas, animated highlighting for operations",
+              "Tree diagrams: sequential probability trees with branch probabilities and leaf calculations",
+              "Urn models: animated ball drawing with/without replacement, color-coded",
+              "Probability tables: joint/marginal/conditional probability tables with highlighting",
+              "Distribution comparison: overlay multiple distributions with parameter sliders",
+              "QQ plots: any distribution against any other, with confidence bands",
+              "Hazard/survival function plots from any lifetime distribution",
+              "Markov chain diagrams: state transition graphs with animated probability flow",
+              "Random walk visualizations: 1D, 2D, lattice walks with path tracing",
+              "Convergence plots: running average, empirical CDF vs theoretical, epsilon-band visualization",
+              "Copula visualizations: scatter plots with marginal distributions, dependence structures",
+              "Entropy diagrams: information content visualization, Venn diagrams for mutual information"
+            ]
+          },
+          "simulation-engine.js": {
+            "description": "Monte Carlo and stochastic simulation framework",
+            "features": [
+              "Configurable simulation runner: n iterations, seed control, progress callback",
+              "Animated sample accumulation: watch histogram/density build as samples arrive",
+              "Convergence tracker: plot running estimate vs true value with CI bands",
+              "Random walk engine: 1D/2D/3D walks with configurable step distributions",
+              "Markov chain simulator: run chains, visualize state occupancy over time",
+              "Queuing simulator: M/M/1, M/M/c with arrival/service animations",
+              "Branching process simulator: generation-by-generation population evolution",
+              "Bootstrap engine: resample, compute statistic, build sampling distribution"
+            ]
+          }
+        },
+        "new_datasets": [
+          {"filename": "coin_sequences.csv", "n": 10000, "description": "10,000 sequences of 100 fair coin flips for empirical probability exploration"},
+          {"filename": "dice_rolls.csv", "n": 50000, "description": "50,000 rolls of various dice (d4, d6, d8, d12, d20) for discrete distribution work"},
+          {"filename": "waiting_times.csv", "n": 5000, "description": "ED arrival times and service times for Poisson process / exponential / queuing exercises"},
+          {"filename": "disease_screening.csv", "n": 10000, "description": "Population screening data with true disease status, multiple test results, prevalence variation by subgroup"},
+          {"filename": "markov_weather.csv", "n": 3650, "description": "10 years of daily weather state transitions (sunny/cloudy/rainy) for Markov chain exercises"},
+          {"filename": "clinical_measurements.csv", "n": 2000, "description": "Bivariate clinical measurements (e.g., systolic/diastolic BP, height/weight) for joint distribution and copula work"}
+        ],
+        "quality_gates": [
+          "All three new OJS modules import correctly",
+          "prob-engine.js: binomial PMF matches R dbinom() within 1e-12",
+          "prob-engine.js: Markov stationary distribution matches R eigen() within 1e-10",
+          "prob-plots.js: Venn diagrams render with correct areas",
+          "simulation-engine.js: Monte Carlo estimate of π converges",
+          "All datasets load in both Julia and WebR"
+        ]
+      },
+      {
+        "id": "101",
+        "title": "Probability Appendices & Cross-References",
+        "phase": "foundation",
+        "prerequisites": ["100"],
+        "tasks": [
+          "Create appendix/probability-formulas.qmd — all probability formulas organized by chapter (31-60)",
+          "Create appendix/distribution-reference.qmd — comprehensive distribution table: name, parameters, PMF/PDF, CDF, mean, variance, MGF, relationships, when to use, clinical examples. Interactive: click any distribution to see plot",
+          "Create appendix/probability-tables.qmd — standard Normal table, t-table, chi-squared table, F-table (interactive: enter value, get probability, or enter probability, get critical value)",
+          "Create appendix/simulation-cookbook.qmd — OJS code patterns for common probability simulations",
+          "Update appendix/glossary.qmd with 200+ probability-specific terms",
+          "Add Part 'Probability' to _quarto.yml with all 30 new chapters"
+        ]
+      }
+    ],
+
+    "chapters_beginner": [
+      {
+        "id": "110",
+        "title": "Ch31: What Is Probability?",
+        "chapter_number": 31,
+        "tier": "beginner",
+        "file": "chapters/probability/31-what-is-probability.qmd",
+        "prerequisites": [],
+        "estimated_time_minutes": 60,
+        "content": [
+          "31.1 Why physicians need probability — clinical reasoning IS probabilistic reasoning",
+          "31.2 Three interpretations: Classical (equally likely outcomes), Frequentist (long-run frequency), Bayesian (degree of belief)",
+          "31.3 Sample spaces and events — Ω, simple events, compound events, impossible/certain",
+          "31.4 Kolmogorov axioms — non-negativity, normalization, countable additivity",
+          "31.5 Properties: complement rule, inclusion-exclusion for 2 and 3 events",
+          "31.6 Probability as area — geometric probability, Buffon's needle preview",
+          "31.7 Common pitfalls: gambler's fallacy, base rate neglect, conjunction fallacy"
+        ],
+        "ojs_demos": [
+          {"title": "Coin Flip Laboratory", "description": "Flip n coins (slider: 1→10,000). Watch relative frequency converge to 0.5. Real-time running proportion plot. Toggle: fair vs biased coin (slider: p from 0.01 to 0.99). THE foundational demo — probability as long-run frequency."},
+          {"title": "Dice Probability Calculator", "description": "Select dice type (d4/d6/d8/d12/d20) and number of dice. Define event (e.g., 'sum > 7'). Compute exact probability by enumeration. Show sample space as grid. Highlight favorable outcomes."},
+          {"title": "Venn Diagram Probability Machine", "description": "Two or three events. Sliders: P(A), P(B), P(A∩B). Auto-compute P(A∪B), P(Aᶜ), P(A−B). Proportional Venn diagram updates in real-time. Highlight selected region."},
+          {"title": "Gambler's Fallacy Simulator", "description": "Streak detector: after seeing HHHHH, what's P(H) on next flip? Simulate 100,000 sequences. Show that post-streak probability is still p. Bust the myth with data."},
+          {"title": "Geometric Probability Playground", "description": "Drop points randomly into a square. Count proportion landing in inscribed circle. Estimate π. Slider: number of points. Watch convergence."}
+        ],
+        "webr_analysis": "Upload any binary outcome data → compute empirical probability with exact binomial CI → compare to theoretical if specified",
+        "exercises": {"count": 8, "types": ["compute probabilities from sample spaces", "apply complement/addition rules", "identify fallacies in clinical reasoning", "calculate probabilities from frequency data"]}
+      },
+      {
+        "id": "111",
+        "title": "Ch32: Counting and Combinatorics",
+        "chapter_number": 32,
+        "tier": "beginner",
+        "file": "chapters/probability/32-counting.qmd",
+        "prerequisites": [31],
+        "estimated_time_minutes": 75,
+        "content": [
+          "32.1 Multiplication principle — sequential choices, tree diagrams",
+          "32.2 Permutations — ordered arrangements, n!, P(n,r), with repetition",
+          "32.3 Combinations — unordered selections, C(n,r), Pascal's triangle",
+          "32.4 Multinomial coefficients — distributing objects into groups",
+          "32.5 Stars and bars — distributing identical objects",
+          "32.6 Clinical applications: how many ways to assign treatments, genetic combinations, diagnostic test orderings",
+          "32.7 Stirling's approximation — handling large factorials",
+          "32.8 The birthday problem — surprising collision probabilities"
+        ],
+        "ojs_demos": [
+          {"title": "Permutation vs Combination Calculator", "description": "Input n and r. Toggle order matters/doesn't. Show P(n,r) vs C(n,r) with visual: arranging colored balls in slots. See why C < P."},
+          {"title": "Pascal's Triangle Explorer", "description": "Interactive Pascal's triangle (up to row 20). Click any entry to see the combination it represents. Highlight diagonals (natural numbers, triangular numbers, Fibonacci). Color by divisibility."},
+          {"title": "Birthday Problem Simulator", "description": "Slider: number of people (2→100). Show exact P(at least one shared birthday). Run simulation (1000 trials). Compare theoretical vs empirical. Show the surprising threshold (~23 people for 50%)."},
+          {"title": "Treatment Assignment Counter", "description": "Clinical scenario: n patients, k treatment arms, block sizes. Compute number of possible randomization sequences. Show why balance matters."},
+          {"title": "Lottery/Rare Event Calculator", "description": "Input: total items, items to choose, winning items. Compute P(winning). Show on log scale. Compare to clinical risks (MI, adverse drug reaction) for perspective."}
+        ],
+        "webr_analysis": "Combinatorial probability calculator: input scenario parameters → compute exact probability using R's choose() and factorial()",
+        "exercises": {"count": 8, "types": ["counting problems with clinical framing", "permutation vs combination identification", "birthday problem variants", "multinomial distribution setup"]}
+      },
+      {
+        "id": "112",
+        "title": "Ch33: Conditional Probability and Independence",
+        "chapter_number": 33,
+        "tier": "beginner",
+        "file": "chapters/probability/33-conditional-independence.qmd",
+        "prerequisites": [31, 32],
+        "estimated_time_minutes": 90,
+        "content": [
+          "33.1 Conditional probability P(A|B) — definition, intuition as 'updating the sample space'",
+          "33.2 Multiplication rule — P(A∩B) = P(A|B)P(B), chain rule for n events",
+          "33.3 Independence — P(A|B) = P(A), mutual vs pairwise independence",
+          "33.4 Law of Total Probability — partitioning the sample space",
+          "33.5 Bayes' theorem — derivation, prior→posterior, clinical diagnostic reasoning",
+          "33.6 Sensitivity, specificity, PPV, NPV as conditional probabilities",
+          "33.7 Sequential testing — updating beliefs with multiple tests",
+          "33.8 Simpson's paradox — when conditional and marginal probabilities conflict",
+          "33.9 Common errors: confusing P(A|B) with P(B|A), prosecutor's fallacy"
+        ],
+        "ojs_demos": [
+          {"title": "Conditional Probability Table Machine", "description": "Input joint probability table (2×2 or 3×3). Auto-compute all marginal and conditional probabilities. Highlight selected conditional. Animated Venn diagram shows the 'zooming in' intuition of conditioning."},
+          {"title": "Bayes' Theorem Step-by-Step", "description": "Clinical scenario: disease prevalence (slider), test sensitivity (slider), test specificity (slider). Walk through Bayes computation step by step. Show natural frequency tree (1000 patients). Show Fagan nomogram. Show icon array (TP/FP/TN/FN colored dots). THE must-have clinical probability demo."},
+          {"title": "Independence Tester", "description": "Input 2×2 table of counts. Compute P(A), P(B), P(A∩B), P(A)×P(B). Visual comparison: if equal → independent. Show chi-squared test as formal check. Animated: generate random independent vs dependent data."},
+          {"title": "Sequential Diagnostic Testing", "description": "Start with pre-test probability. Add Test 1 (sens/spec) → post-test probability becomes pre-test for Test 2. Chain up to 5 tests. Waterfall chart showing probability evolution. Show when additional tests add diminishing value."},
+          {"title": "Simpson's Paradox Demonstrator", "description": "The kidney stone treatment example. Show that Treatment A wins overall but Treatment B wins in every subgroup. Interactive: adjust subgroup sizes to create/eliminate the paradox. DAG showing the confounding structure."},
+          {"title": "Prosecutor's Fallacy Explainer", "description": "P(evidence|innocent) ≠ P(innocent|evidence). Input match probability, prior probability of guilt. Show how Bayes' theorem gives the correct answer. Use the Sally Clark case as example."}
+        ],
+        "webr_analysis": "Upload diagnostic data → full Bayesian analysis: prevalence estimation, test accuracy metrics, sequential test evaluation, subgroup-stratified analysis checking for Simpson's paradox",
+        "exercises": {"count": 10, "types": ["conditional probability from tables", "Bayes' theorem clinical scenarios", "identify independence", "sequential testing calculations", "spot the prosecutor's fallacy"]}
+      },
+      {
+        "id": "113",
+        "title": "Ch34: Discrete Random Variables",
+        "chapter_number": 34,
+        "tier": "beginner",
+        "file": "chapters/probability/34-discrete-rv.qmd",
+        "prerequisites": [31, 32, 33],
+        "estimated_time_minutes": 90,
+        "content": [
+          "34.1 What is a random variable? — mapping outcomes to numbers",
+          "34.2 Probability mass function (PMF) — properties, visualization",
+          "34.3 Cumulative distribution function (CDF) — step function, properties",
+          "34.4 Expected value E(X) — definition, computation, linearity, clinical interpretation as 'average outcome'",
+          "34.5 Variance and standard deviation — Var(X) = E(X²) - [E(X)]², properties",
+          "34.6 Bernoulli distribution — single trial, p, building block for everything",
+          "34.7 Binomial distribution — n trials, exact and approximate calculations, clinical: treatment responders",
+          "34.8 Geometric distribution — waiting for first success, memoryless property",
+          "34.9 Negative Binomial — waiting for r-th success, overdispersed counts",
+          "34.10 Poisson distribution — rare events, approximation to Binomial, clinical: adverse events per patient-year",
+          "34.11 Hypergeometric — sampling without replacement, Fisher's exact test connection"
+        ],
+        "ojs_demos": [
+          {"title": "PMF/CDF Builder", "description": "Define a custom PMF by dragging bar heights. Auto-normalize. Show corresponding CDF (step function) side by side. Compute E(X), Var(X), SD(X) live. Toggle: show E(X) as balance point."},
+          {"title": "Binomial Laboratory", "description": "Sliders: n (1→200), p (0→1). Show PMF bars + Normal approximation overlay. Show CDF. Compute P(X=k), P(X≤k), P(X≥k) for user-specified k. Highlight: mode, mean, ±1SD region. Clinical framing: 'If a drug works in 30% of patients and you treat 50, what's P(at least 20 respond)?'"},
+          {"title": "Poisson Event Counter", "description": "Slider: λ (0.1→20). Show PMF. Simulate Poisson process on a timeline (events as dots). Count events in intervals. Show empirical vs theoretical PMF. Clinical: adverse events per 100 patient-days."},
+          {"title": "Binomial vs Poisson Comparison", "description": "Show when Poisson approximates Binomial (large n, small p). Sliders: n, p. Side-by-side PMFs. Compute max absolute difference. Show convergence as n→∞, p→0, np→λ."},
+          {"title": "Expected Value Game", "description": "Play a clinical decision game. Two treatments: Treatment A has outcome distribution DA, Treatment B has DB. Compute E(X) for each. Choose. Simulate 1000 patients. Show that E(X)-maximizing strategy wins long-run. Introduce risk aversion with utility functions."},
+          {"title": "Hypergeometric Fisher's Exact", "description": "Urn model: N balls, K red, draw n. Slider for each. Show PMF. Connect to 2×2 table and Fisher's exact test. Compute p-value by summing tail probabilities."}
+        ],
+        "webr_analysis": "Upload count data → auto-fit Poisson, Binomial, Negative Binomial → goodness-of-fit tests → parameter estimation with CIs → overdispersion check",
+        "exercises": {"count": 10, "types": ["PMF/CDF calculations", "E(X) and Var(X) from tables", "Binomial probability problems", "Poisson rate estimation", "choose the right discrete distribution"]}
+      },
+      {
+        "id": "114",
+        "title": "Ch35: Continuous Random Variables",
+        "chapter_number": 35,
+        "tier": "beginner",
+        "file": "chapters/probability/35-continuous-rv.qmd",
+        "prerequisites": [34],
+        "estimated_time_minutes": 90,
+        "content": [
+          "35.1 From discrete to continuous — why P(X=x) = 0, probability as area",
+          "35.2 Probability density function (PDF) — properties, interpretation, not a probability",
+          "35.3 CDF for continuous variables — F(x) = P(X≤x), relationship to PDF via integration",
+          "35.4 Expected value and variance — integrals replace sums",
+          "35.5 Uniform distribution — simplest continuous, simulation foundation",
+          "35.6 Exponential distribution — memoryless property, waiting times between Poisson events, hazard rate",
+          "35.7 Normal distribution deep dive — parameters μ, σ², the 68-95-99.7 rule, standard Normal Z",
+          "35.8 Normal probability calculations — Z-tables, complement, between two values",
+          "35.9 Gamma distribution — sum of exponentials, flexible shape, clinical: hospital LOS",
+          "35.10 Beta distribution — probabilities of probabilities, conjugate prior for Binomial",
+          "35.11 Log-Normal — when logarithm is Normal, clinical: lab values, drug concentrations"
+        ],
+        "ojs_demos": [
+          {"title": "PDF Area Calculator", "description": "Select distribution. Parameter sliders. Click/drag to shade region under PDF curve. Shows P(a < X < b) as shaded area in real-time. Toggle: show CDF alongside, highlight corresponding CDF segment."},
+          {"title": "Normal Distribution Workbench", "description": "Sliders: μ, σ. Shade modes: P(X < a), P(X > a), P(a < X < b), P(|X-μ| < kσ). Show exact probability. Show Z-score. Draw 68-95-99.7 bands. Toggle: show standard Normal alongside with Z-axis. THE workhorse Normal demo."},
+          {"title": "Exponential Memoryless Demo", "description": "Exponential with rate λ. Show that P(X > s+t | X > s) = P(X > t). Visual: survival function. Slider: conditioning time s. Animate the 'fresh start' property. Clinical: if a patient has waited t minutes, expected additional wait is still 1/λ."},
+          {"title": "Distribution Shape Explorer", "description": "Dropdown: Uniform / Normal / Exponential / Gamma / Beta / Log-Normal / Weibull. Parameter sliders for each. Show PDF, CDF, mean line, median line, mode line. Display moments. Compare any two distributions side by side."},
+          {"title": "Quantile/Percentile Calculator", "description": "Input: distribution + parameters + probability p. Output: quantile x such that P(X ≤ x) = p. Or reverse: input x, get P(X ≤ x). Visual: shaded area up to x on PDF. Clinical: 'What BMI is at the 95th percentile?'"},
+          {"title": "Beta Distribution for Proportions", "description": "Sliders: α, β. Show PDF shape morphing (U-shaped, uniform, unimodal, J-shaped). Show how Beta is the conjugate prior for Binomial. Add data: observe k successes in n trials → posterior Beta(α+k, β+n-k). Animated updating."}
+        ],
+        "webr_analysis": "Upload continuous measurement data → fit multiple distributions (Normal, Log-Normal, Gamma, Weibull) → AIC comparison → QQ plots → goodness-of-fit tests → parameter estimates with CIs",
+        "exercises": {"count": 10, "types": ["PDF area calculations", "Normal Z-score problems", "exponential waiting time problems", "choose the right continuous distribution", "quantile calculations"]}
+      },
+      {
+        "id": "115",
+        "title": "Ch36: Functions of Random Variables and Transformations",
+        "chapter_number": 36,
+        "tier": "beginner",
+        "file": "chapters/probability/36-transformations.qmd",
+        "prerequisites": [34, 35],
+        "estimated_time_minutes": 75,
+        "content": [
+          "36.1 Functions of a random variable — if X has distribution f, what is the distribution of g(X)?",
+          "36.2 The CDF method — F_Y(y) = P(g(X) ≤ y)",
+          "36.3 The transformation formula (change of variables) — f_Y(y) = f_X(g⁻¹(y)) |dg⁻¹/dy|",
+          "36.4 Linear transformations — Y = aX + b, effect on mean and variance",
+          "36.5 Log transformation — why it normalizes right-skewed clinical data",
+          "36.6 Box-Cox transformations — finding the optimal power transformation",
+          "36.7 Z-score standardization — (X - μ)/σ, universal scale",
+          "36.8 Probability integral transform — F(X) ~ Uniform(0,1), foundation of simulation",
+          "36.9 Inverse transform sampling — generating random variables from any distribution",
+          "36.10 Clinical applications: reference ranges, percentile curves, normalized lab values"
+        ],
+        "ojs_demos": [
+          {"title": "Transformation Visualizer", "description": "Left panel: PDF of X. Middle panel: transformation function g(x) (user selects: linear, square, log, exp, sqrt, reciprocal, or custom). Right panel: resulting PDF of Y = g(X). Animate a sample from X through the transformation to Y."},
+          {"title": "Log-Transform Demo", "description": "Generate right-skewed data (e.g., Lognormal). Show histogram before and after log transform. Show QQ plots before and after. Compute skewness before and after. Clinical: lab values, drug concentrations, hospital costs."},
+          {"title": "Z-Score Machine", "description": "Input: raw value, mean, SD. Output: Z-score. Visual: mark position on original distribution and standard Normal simultaneously. Slider: sweep through raw values, watch Z-score update. Batch mode: paste column of values, get Z-scores."},
+          {"title": "Inverse Transform Sampler", "description": "Step 1: Show CDF of target distribution. Step 2: Draw U ~ Uniform(0,1) (horizontal line). Step 3: Trace to CDF, drop down to x-axis = generated sample. Animate repeatedly. Watch histogram of generated samples match target PDF. This is HOW random number generators work."},
+          {"title": "Box-Cox Optimizer", "description": "Upload or generate skewed data. Slider: λ from -2 to 2. Show transformed histogram. Compute normality test p-value at each λ. Find optimal λ. Show log-likelihood profile."}
+        ],
+        "webr_analysis": "Upload data → apply common transformations (log, sqrt, Box-Cox) → compare normality before/after → recommend best transformation → compute back-transformed CIs",
+        "exercises": {"count": 8, "types": ["find distribution of Y=g(X)", "apply Z-score standardization", "inverse transform method", "choose optimal transformation for clinical data"]}
+      }
+    ],
+
+    "chapters_intermediate": [
+      {
+        "id": "116",
+        "title": "Ch37: Joint Distributions and Bivariate Probability",
+        "chapter_number": 37,
+        "tier": "intermediate",
+        "file": "chapters/probability/37-joint-distributions.qmd",
+        "prerequisites": [34, 35],
+        "estimated_time_minutes": 90,
+        "content": [
+          "37.1 Joint PMF and PDF — definition, visualization as surfaces/heatmaps",
+          "37.2 Marginal distributions — summing/integrating out one variable",
+          "37.3 Conditional distributions — f(y|x), conditional expectation E(Y|X=x)",
+          "37.4 Independence — f(x,y) = f(x)f(y), testing independence",
+          "37.5 Covariance and correlation — Cov(X,Y) = E(XY) - E(X)E(Y), ρ",
+          "37.6 Bivariate Normal distribution — parameters, contour plots, conditional distributions",
+          "37.7 Multinomial distribution — extension of Binomial to k categories",
+          "37.8 Clinical application: joint modeling of systolic/diastolic BP, correlated biomarkers"
+        ],
+        "ojs_demos": [
+          {"title": "Joint Distribution Heatmap", "description": "2D heatmap of joint PDF/PMF. Sliders for distribution parameters. Click row/column to show marginal. Click cell to show conditional. Toggle: contour plot vs surface plot vs heatmap."},
+          {"title": "Bivariate Normal Explorer", "description": "Sliders: μ₁, μ₂, σ₁, σ₂, ρ. Show contour ellipses, marginal distributions on axes, conditional distribution for any fixed x. Watch ellipse rotate as ρ changes. Mark P(X>a, Y>b) as shaded region."},
+          {"title": "Covariance/Correlation Builder", "description": "Scatter plot of bivariate data. Drag points to adjust. Watch Cov(X,Y) and ρ update live. Show the deviation rectangles that define covariance. Toggle: show regression line."},
+          {"title": "Independence Checker", "description": "Input joint probability table (up to 4×4). Compute all marginals. Check if f(x,y) = f(x)f(y) for every cell. Highlight violations. Compute chi-squared test."},
+          {"title": "Marginal vs Conditional", "description": "Joint distribution of (Disease Severity, Treatment Response). Show marginal of Response. Then condition on Severity=Mild, Moderate, Severe. Show how conditional distributions differ from marginal. Animate the 'slicing' operation."}
+        ],
+        "webr_analysis": "Upload bivariate data → scatterplot + marginal histograms → correlation + covariance with CIs → test for bivariate normality → conditional distribution analysis"
+      },
+      {
+        "id": "117",
+        "title": "Ch38: Sums of Random Variables and Convolutions",
+        "chapter_number": 38,
+        "tier": "intermediate",
+        "file": "chapters/probability/38-sums-convolutions.qmd",
+        "prerequisites": [37],
+        "estimated_time_minutes": 75,
+        "content": [
+          "38.1 Distribution of X+Y — convolution of PDFs/PMFs",
+          "38.2 Sum of independent Normals — still Normal, parameters add simply",
+          "38.3 Sum of independent Poissons — still Poisson, rates add",
+          "38.4 Sum of independent Exponentials — Gamma distribution",
+          "38.5 E(X+Y) = E(X) + E(Y) always; Var(X+Y) = Var(X) + Var(Y) only if independent",
+          "38.6 Distribution of X̄ — the sampling distribution derived properly",
+          "38.7 Chi-squared as sum of squared standard Normals",
+          "38.8 Clinical: total dose = sum of individual doses, aggregate costs, combined risk scores"
+        ],
+        "ojs_demos": [
+          {"title": "Convolution Visualizer", "description": "Select two distributions. Show individual PDFs. Animate the convolution process: slide one PDF across the other, show multiplication area at each point. Result: PDF of sum. Stunning visual demonstration of convolution."},
+          {"title": "Sum of Normals", "description": "Two Normal distributions with adjustable μ and σ. Show individual PDFs. Show PDF of sum (also Normal). Verify: μ_sum = μ₁+μ₂, σ²_sum = σ₁²+σ₂². Extend to sum of 3, 4, 5 Normals."},
+          {"title": "Exponential to Gamma", "description": "Sum of n Exponential(λ). Slider: n from 1 to 20. Show Erlang/Gamma PDF emerging. Animate: roll dice-like exponentials, accumulate sum, build histogram, compare to Gamma(n, λ)."},
+          {"title": "Variance of Sums", "description": "Two random variables with adjustable correlation ρ. Show Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y). Slider: ρ from -1 to 1. Watch variance of sum change. Show why diversification reduces portfolio risk (negative correlation)."}
+        ]
+      },
+      {
+        "id": "118",
+        "title": "Ch39: Moment Generating Functions and Characteristic Functions",
+        "chapter_number": 39,
+        "tier": "intermediate",
+        "file": "chapters/probability/39-mgf.qmd",
+        "prerequisites": [34, 35, 38],
+        "estimated_time_minutes": 75,
+        "content": [
+          "39.1 Moments — E(X), E(X²), E(Xᵏ), central moments, standardized moments",
+          "39.2 Moment generating function — M(t) = E(e^{tX}), properties, uniqueness",
+          "39.3 Using MGF to find moments — M'(0) = E(X), M''(0) = E(X²), etc.",
+          "39.4 MGF of common distributions — Bernoulli, Binomial, Poisson, Normal, Exponential, Gamma",
+          "39.5 MGF of sums of independent RVs — M_{X+Y}(t) = M_X(t)·M_Y(t)",
+          "39.6 Probability generating function — G(s) = E(s^X) for non-negative integers",
+          "39.7 Characteristic function — φ(t) = E(e^{itX}), always exists, Fourier transform connection",
+          "39.8 Cumulant generating function — log MGF, cumulants, why Normal has only 2 non-zero cumulants"
+        ],
+        "ojs_demos": [
+          {"title": "MGF Explorer", "description": "Select distribution. Show MGF formula and plot M(t) vs t. Compute derivatives at t=0 to extract moments. Verify: M'(0) = E(X), M''(0) = E(X²). Show moment recovery step by step."},
+          {"title": "MGF Product = Sum", "description": "Two independent distributions. Show individual MGFs. Multiply them → get MGF of sum. Identify the resulting distribution. Example: Binomial(n₁,p) + Binomial(n₂,p) = Binomial(n₁+n₂,p) via MGF."},
+          {"title": "Moment Calculator", "description": "Input distribution + parameters. Compute and display: mean, variance, skewness, kurtosis (both raw and central moments). Show formulas. Compare moments across distribution families."},
+          {"title": "Characteristic Function Visualizer", "description": "Show φ(t) in the complex plane (real and imaginary parts). For Normal: φ(t) = exp(iμt - σ²t²/2). Animate for different distributions. Show why CF always exists (even when MGF doesn't, e.g., Cauchy)."}
+        ]
+      },
+      {
+        "id": "120",
+        "title": "Ch40: Inequalities and Bounds",
+        "chapter_number": 40,
+        "tier": "intermediate",
+        "file": "chapters/probability/40-inequalities.qmd",
+        "prerequisites": [34, 35],
+        "estimated_time_minutes": 60,
+        "content": [
+          "40.1 Why bounds matter — when exact distributions are unknown or intractable",
+          "40.2 Markov's inequality — P(X ≥ a) ≤ E(X)/a, non-negative RVs only",
+          "40.3 Chebyshev's inequality — P(|X-μ| ≥ kσ) ≤ 1/k², any distribution",
+          "40.4 Comparing Chebyshev to exact (Normal: much tighter than Chebyshev bound)",
+          "40.5 Chernoff bounds — exponential tail bounds via MGF, tightest of the three",
+          "40.6 Jensen's inequality — E(g(X)) ≥ g(E(X)) for convex g, applications",
+          "40.7 Cauchy-Schwarz inequality — |E(XY)|² ≤ E(X²)E(Y²), correlation bounded by ±1",
+          "40.8 Clinical applications: worst-case risk bounds, outlier probability bounds"
+        ],
+        "ojs_demos": [
+          {"title": "Inequality Comparison Dashboard", "description": "Select distribution. Input threshold a. Compute exact P(X ≥ a), Markov bound, Chebyshev bound, Chernoff bound. Bar chart comparing all four. Shows how much looser the bounds are. Slider: a from 1 to 5 standard deviations."},
+          {"title": "Chebyshev vs Reality", "description": "Select distribution (Normal, Uniform, Exponential, etc.). Shade P(|X-μ| ≥ kσ). Compare exact probability to Chebyshev bound 1/k². Show that Chebyshev is conservative but always valid. Slider: k from 1 to 5."},
+          {"title": "Jensen's Inequality Visualizer", "description": "Draw a convex function g(x). Show distribution of X. Mark E(X) on x-axis. Show g(E(X)) vs E(g(X)). Illustrate: the average of the function ≥ the function of the average. Clinical: why average cost ≠ cost at average patient."}
+        ]
+      },
+      {
+        "id": "121",
+        "title": "Ch41: The Law of Large Numbers",
+        "chapter_number": 41,
+        "tier": "intermediate",
+        "file": "chapters/probability/41-law-of-large-numbers.qmd",
+        "prerequisites": [34, 35, 40],
+        "estimated_time_minutes": 75,
+        "content": [
+          "41.1 Weak Law of Large Numbers — convergence in probability of X̄ to μ",
+          "41.2 Proof via Chebyshev — Var(X̄) = σ²/n → 0",
+          "41.3 Strong Law of Large Numbers — almost sure convergence",
+          "41.4 What LLN does NOT say — it doesn't say individual observations converge",
+          "41.5 Rate of convergence — √n rate, connection to standard error",
+          "41.6 LLN for proportions — p̂ → p, foundation of frequentist probability",
+          "41.7 Clinical applications: why large RCTs are more reliable, insurance pooling, why small samples are dangerous"
+        ],
+        "ojs_demos": [
+          {"title": "LLN Live Simulator", "description": "Select distribution with known μ. Generate observations one at a time (or in batches). Plot running average X̄_n vs n. Show convergence to μ. Add ε-band: P(|X̄_n - μ| < ε). Multiple simultaneous paths (5-10 sample paths, all converging). THE core LLN visualization."},
+          {"title": "Sample Size and Precision", "description": "Show how X̄ gets more precise as n grows. Plot distribution of X̄ for n = 5, 10, 50, 100, 500, 1000. Watch it tighten around μ. Show that SD(X̄) = σ/√n. The visual argument for why larger studies are better."},
+          {"title": "LLN Failure Cases", "description": "Show what happens with heavy-tailed distributions (Cauchy — no mean, LLN doesn't apply). X̄ does NOT converge. Compare: Normal (converges beautifully) vs Cauchy (wanders forever). Powerful lesson."},
+          {"title": "Insurance Pooling Demo", "description": "n policyholders, each with random claim X. Premium set at E(X) + margin. Show that as n increases, P(total claims exceed total premiums) → 0. The mathematical foundation of insurance."}
+        ]
+      },
+      {
+        "id": "122",
+        "title": "Ch42: Central Limit Theorem — The Deep Dive",
+        "chapter_number": 42,
+        "tier": "intermediate",
+        "file": "chapters/probability/42-clt-deep-dive.qmd",
+        "prerequisites": [41],
+        "estimated_time_minutes": 90,
+        "content": [
+          "42.1 Statement of CLT — (X̄ - μ)/(σ/√n) → N(0,1) in distribution",
+          "42.2 Why CLT is the most important theorem in statistics — justifies t-tests, CIs, z-tests",
+          "42.3 Visual demonstration: sum of Uniforms → Normal, sum of Exponentials → Normal",
+          "42.4 Rate of convergence — Berry-Esseen theorem, when n=30 is enough (and when it isn't)",
+          "42.5 CLT for proportions — p̂ ≈ N(p, p(1-p)/n), normal approximation to Binomial",
+          "42.6 CLT for sums — S_n ≈ N(nμ, nσ²), total costs/doses/events",
+          "42.7 Continuity correction — for discrete → continuous approximation",
+          "42.8 Delta method — approximate distribution of g(X̄) for smooth g",
+          "42.9 Multivariate CLT — X̄ → N(μ, Σ/n) in multiple dimensions",
+          "42.10 When CLT fails — heavy tails, infinite variance, non-iid samples"
+        ],
+        "ojs_demos": [
+          {"title": "Ultimate CLT Simulator", "description": "Choose ANY source distribution: Uniform, Exponential, Bernoulli, Poisson, Chi-squared, custom. Slider: sample size n (1→500). Generate 10,000 sample means. Show histogram morphing from source shape to bell curve as n increases. Overlay Normal PDF. Show QQ plot. Compute KS test p-value against Normal. Animated version: watch it happen frame by frame as n increases. THE definitive CLT demo."},
+          {"title": "Berry-Esseen Convergence Rate", "description": "Select distribution with known skewness γ. Show exact CDF of X̄ vs Normal CDF. Show Berry-Esseen bound on maximum difference. Demonstrate: highly skewed distributions need larger n. How large is 'large enough'? Clinical: when is n=30 adequate?"},
+          {"title": "Normal Approximation to Binomial", "description": "Sliders: n, p. Show exact Binomial PMF. Overlay Normal approximation PDF. Show with and without continuity correction. Compute max error. Show when approximation breaks down (p near 0 or 1, small n)."},
+          {"title": "Delta Method Calculator", "description": "Function g(x) (e.g., log, exp, 1/x, x²). Input distribution of X̄. Compute approximate distribution of g(X̄) via Delta Method. Compare to exact (via simulation). Clinical: CI for odds ratio from log-OR."}
+        ],
+        "webr_analysis": "Upload data → test CLT assumption: is sample mean approximately Normal? → QQ plot of bootstrap means → Shapiro-Wilk on resampled means → recommend: parametric OK or use nonparametric"
+      },
+      {
+        "id": "123",
+        "title": "Ch43: Order Statistics and Extreme Values",
+        "chapter_number": 43,
+        "tier": "intermediate",
+        "file": "chapters/probability/43-order-statistics.qmd",
+        "prerequisites": [35, 37],
+        "estimated_time_minutes": 75,
+        "content": [
+          "43.1 Order statistics X₍₁₎ ≤ X₍₂₎ ≤ ... ≤ X₍ₙ₎ — the sorted sample",
+          "43.2 Distribution of X₍k₎ — PDF and CDF of the k-th order statistic",
+          "43.3 Distribution of minimum X₍₁₎ and maximum X₍ₙ₎ — tail behavior",
+          "43.4 Range R = X₍ₙ₎ - X₍₁₎, midrange, interquartile range as order statistics",
+          "43.5 Sample median and quantiles as order statistics",
+          "43.6 Extreme value theory — Gumbel, Fréchet, Weibull types",
+          "43.7 Fisher-Tippett theorem — the CLT for maxima",
+          "43.8 Clinical: reference range construction, outlier detection, extreme lab values, worst-case outcomes"
+        ],
+        "ojs_demos": [
+          {"title": "Order Statistic Explorer", "description": "Generate n samples from selected distribution. Show sorted values on number line. Highlight k-th order statistic. Show theoretical PDF of X₍k₎. Slider: k from 1 to n. Show how median = X₍(n+1)/2₎."},
+          {"title": "Min/Max Distribution", "description": "n iid samples from distribution. Show PDF of min and max. As n increases, min shifts left, max shifts right. Show why max of Normals grows like √(2 log n). Clinical: worst case in a group of n patients."},
+          {"title": "Extreme Value Type Selector", "description": "Generate maxima of samples of size n from various distributions. Fit GEV distribution. Show which type (Gumbel/Fréchet/Weibull) applies. Clinical: modeling extreme lab values, 100-year flood equivalent in clinical data."}
+        ]
+      },
+      {
+        "id": "124",
+        "title": "Ch44: Convergence Concepts",
+        "chapter_number": 44,
+        "tier": "intermediate",
+        "file": "chapters/probability/44-convergence.qmd",
+        "prerequisites": [41, 42],
+        "estimated_time_minutes": 75,
+        "content": [
+          "44.1 Four modes of convergence — almost sure, in probability, in distribution, in mean square",
+          "44.2 Relationships: a.s. → in probability → in distribution; in mean square → in probability",
+          "44.3 Convergence in distribution — CDF convergence, Portmanteau theorem",
+          "44.4 Slutsky's theorem — if X_n →d X and Y_n →p c, then X_n + Y_n →d X + c",
+          "44.5 Continuous mapping theorem — if X_n →d X, then g(X_n) →d g(X) for continuous g",
+          "44.6 Why this matters for statistics — justifies plug-in estimators, bootstrap, asymptotics",
+          "44.7 Clinical: convergence of treatment effect estimates as trial enrolls patients"
+        ],
+        "ojs_demos": [
+          {"title": "Four Modes of Convergence", "description": "Visual comparison. Same sequence X_n, show all four convergence checks. Highlight which modes hold and which don't for specific examples. E.g., convergence in distribution but not in probability."},
+          {"title": "Convergence Speed Comparison", "description": "Three estimators of the same parameter. Run n = 10, 50, 100, 500, 1000. Compare convergence rates. Show MSE vs n. Which estimator converges fastest?"},
+          {"title": "Slutsky's Theorem in Action", "description": "X_n →d N(0,1), Y_n = σ̂/σ →p 1. Show that X_n/Y_n →d N(0,1). This is why t-statistics work! Animate: as n grows, the ratio distribution approaches standard Normal."}
+        ]
+      },
+      {
+        "id": "125",
+        "title": "Ch45: Conditional Expectation and Prediction",
+        "chapter_number": 45,
+        "tier": "intermediate",
+        "file": "chapters/probability/45-conditional-expectation.qmd",
+        "prerequisites": [37, 42],
+        "estimated_time_minutes": 75,
+        "content": [
+          "45.1 Conditional expectation E(Y|X=x) — the regression function",
+          "45.2 Law of iterated expectation — E(Y) = E[E(Y|X)], the tower property",
+          "45.3 Law of total variance — Var(Y) = E[Var(Y|X)] + Var[E(Y|X)]",
+          "45.4 Conditional expectation as best predictor — minimizes MSE",
+          "45.5 Linear prediction — E(Y|X) when joint is bivariate Normal",
+          "45.6 Connection to regression — E(Y|X=x) = α + βx for bivariate Normal",
+          "45.7 Adam's law and Eve's law (iterated expectation/variance) in clinical research",
+          "45.8 Clinical: risk stratification, subgroup analysis justification, variance decomposition in hierarchical data"
+        ],
+        "ojs_demos": [
+          {"title": "Conditional Expectation Visualizer", "description": "Bivariate scatter plot. Draw E(Y|X=x) curve through the data (regression function). Show it's the curve that minimizes MSE. Compare to: best constant predictor E(Y), best linear predictor, true conditional mean."},
+          {"title": "Law of Total Expectation", "description": "Population divided into subgroups. Show E(Y) in each subgroup. Weighted average = E(Y) overall. Adjust subgroup sizes/means. Show the decomposition in action. Clinical: overall treatment effect from subgroup effects."},
+          {"title": "Variance Decomposition", "description": "Show Var(Y) = E[Var(Y|X)] + Var[E(Y|X)]. The 'within-group variance' + 'between-group variance'. Slider: adjust group separation. When between > within → groups are meaningfully different. Foundation of ANOVA, ICC."}
+        ]
+      }
+    ],
+
+    "chapters_advanced": [
+      {
+        "id": "126",
+        "title": "Ch46: Multivariate Distributions",
+        "chapter_number": 46,
+        "tier": "advanced",
+        "file": "chapters/probability/46-multivariate.qmd",
+        "prerequisites": [37, 39],
+        "estimated_time_minutes": 90,
+        "content": [
+          "46.1 Multivariate Normal — μ vector, Σ covariance matrix, PDF, contour ellipsoids",
+          "46.2 Properties: marginals are Normal, conditionals are Normal, linear combinations are Normal",
+          "46.3 Mahalanobis distance — (x-μ)ᵀΣ⁻¹(x-μ), multivariate outlier detection",
+          "46.4 Wishart distribution — distribution of sample covariance matrix",
+          "46.5 Dirichlet distribution — multivariate generalization of Beta, compositional data",
+          "46.6 Copulas — modeling dependence separately from marginals",
+          "46.7 Clinical: multivariate reference ranges, correlated biomarker panels, compositional microbiome data"
+        ],
+        "ojs_demos": [
+          {"title": "Multivariate Normal 3D Explorer", "description": "3D surface plot of bivariate Normal PDF. Rotate/zoom. Sliders: μ₁, μ₂, σ₁, σ₂, ρ. Show contour ellipses at 1σ, 2σ, 3σ. Click any point to see Mahalanobis distance."},
+          {"title": "Copula Gallery", "description": "Same marginals (e.g., both Normal), different copulas (Gaussian, Clayton, Gumbel, Frank). Show scatter plots and contour plots. Demonstrate that dependence structure is separate from marginals."},
+          {"title": "Mahalanobis Outlier Detector", "description": "Upload or generate bivariate data. Compute Mahalanobis distances. Color points by distance. Mark outliers beyond chi-squared threshold. Compare to univariate outlier detection."}
+        ]
+      },
+      {
+        "id": "127",
+        "title": "Ch47: Stochastic Processes — Introduction",
+        "chapter_number": 47,
+        "tier": "advanced",
+        "file": "chapters/probability/47-stochastic-processes.qmd",
+        "prerequisites": [42, 44],
+        "estimated_time_minutes": 90,
+        "content": [
+          "47.1 What is a stochastic process? — {X(t), t ∈ T} or {X_n, n ∈ ℕ}",
+          "47.2 Classification: discrete/continuous time × discrete/continuous state",
+          "47.3 Bernoulli process — sequence of independent trials, foundation",
+          "47.4 Random walks — simple, with drift, on integers, gambler's ruin",
+          "47.5 Poisson process — counting events in time, properties (independent/stationary increments)",
+          "47.6 Inter-arrival and waiting times — Exponential and Gamma connections",
+          "47.7 Non-homogeneous Poisson process — time-varying rate λ(t)",
+          "47.8 Clinical: patient arrivals to ED, adverse event monitoring, sequential trial monitoring"
+        ],
+        "ojs_demos": [
+          {"title": "Random Walk Simulator", "description": "1D random walk: step +1 or -1 with probability p/q. Animate path. Slider: p from 0 to 1. Show: with p=0.5 walk is recurrent (returns to origin), with p≠0.5 drifts away. Multiple simultaneous walks. Show gambler's ruin probability."},
+          {"title": "2D Random Walk", "description": "Walk on integer lattice. Animated path tracing. Show visited sites heatmap. Demonstrate recurrence in 2D (returns to origin with probability 1) vs transience in 3D."},
+          {"title": "Poisson Process Animator", "description": "Events on a timeline. Slider: rate λ. Watch events appear. Count events in intervals. Show that counts follow Poisson(λt). Show inter-arrival times follow Exp(λ). Superpose two processes. Clinical: ED arrivals."},
+          {"title": "Gambler's Ruin Calculator", "description": "Player starts with $a, opponent has $(b-a). Each round: win/lose $1 with probability p/q. Compute: P(ruin), E(game duration). Slider: a, b, p. Run simulations. Show that even near-fair games end in ruin given enough time."}
+        ]
+      },
+      {
+        "id": "128",
+        "title": "Ch48: Markov Chains",
+        "chapter_number": 48,
+        "tier": "advanced",
+        "file": "chapters/probability/48-markov-chains.qmd",
+        "prerequisites": [47],
+        "estimated_time_minutes": 90,
+        "content": [
+          "48.1 Markov property — the future depends only on the present, not the past",
+          "48.2 Transition matrix P — P_{ij} = P(X_{n+1}=j | X_n=i)",
+          "48.3 n-step transition probabilities — P^n = P × P × ... × P",
+          "48.4 State classification — recurrent, transient, absorbing, communicating classes",
+          "48.5 Periodicity — aperiodic vs periodic chains",
+          "48.6 Stationary distribution — π = πP, existence and uniqueness, ergodic theorem",
+          "48.7 Absorption probabilities — reaching absorbing states, mean time to absorption",
+          "48.8 Clinical: disease progression models, patient flow through hospital, Markov models in health economics (cost-effectiveness)"
+        ],
+        "ojs_demos": [
+          {"title": "Markov Chain Builder", "description": "Draw states as circles. Draw arrows with transition probabilities (must sum to 1 from each state). Animate: token moves through states according to probabilities. Show state occupancy histogram building up. Compute stationary distribution."},
+          {"title": "Disease Progression Model", "description": "States: Healthy → Mild → Moderate → Severe → Dead. Input transition probabilities. Run cohort of 1000 patients forward in time. Show population distribution across states at each time step. Compute expected time in each state. Life expectancy. QALY calculation."},
+          {"title": "Transition Matrix Powers", "description": "Input transition matrix (up to 5×5). Show P, P², P³, ..., P^n. Watch rows converge to stationary distribution. Visualize convergence rate. Show eigenvalue decomposition."},
+          {"title": "Absorbing Chain Calculator", "description": "Mark states as absorbing or transient. Compute fundamental matrix N = (I-Q)⁻¹. Show absorption probabilities B = NR. Show expected number of visits to each transient state. Mean time to absorption."},
+          {"title": "PageRank Demo", "description": "Small web graph (5-10 pages). Links as directed edges. Compute PageRank via Markov chain. Show stationary distribution = page importance. Add/remove links, watch rankings change. The Google algorithm explained."}
+        ],
+        "webr_analysis": "Upload longitudinal state data → estimate transition matrix → classify states → compute stationary distribution → project forward → cost-effectiveness analysis"
+      },
+      {
+        "id": "130",
+        "title": "Ch49: Poisson Processes and Renewal Theory",
+        "chapter_number": 49,
+        "tier": "advanced",
+        "file": "chapters/probability/49-poisson-processes.qmd",
+        "prerequisites": [47],
+        "estimated_time_minutes": 75,
+        "content": [
+          "49.1 Poisson process formal definition — three equivalent definitions",
+          "49.2 Merging and splitting — superposition of independent Poisson processes",
+          "49.3 Conditional distribution of arrival times given N(t) = n — uniform on [0,t]",
+          "49.4 Non-homogeneous Poisson processes — time-varying rate λ(t), thinning",
+          "49.5 Compound Poisson process — random sizes at Poisson-arriving events",
+          "49.6 Renewal processes — generalize Poisson by allowing non-exponential inter-arrivals",
+          "49.7 Elementary renewal theorem — N(t)/t → 1/E(X) as t→∞",
+          "49.8 Clinical: modeling adverse event arrivals, ED patient flow, equipment failures, disease recurrences"
+        ],
+        "ojs_demos": [
+          {"title": "Poisson Merging/Splitting", "description": "Two independent Poisson processes (different rates, different colors). Merge them: result is Poisson with summed rate. Split a process: each event randomly assigned to type A or B. Show that both marginals are Poisson."},
+          {"title": "Non-Homogeneous Poisson Process", "description": "Draw rate function λ(t) by clicking control points. Generate events via thinning algorithm. Show events cluster where rate is high. Clinical: ED arrivals peak at certain hours."},
+          {"title": "Compound Poisson", "description": "Events arrive as Poisson. Each event has a random size (claim amount / cost). Show total accumulated by time t. Compute E[S(t)] and Var[S(t)]. Insurance/healthcare cost modeling."}
+        ]
+      },
+      {
+        "id": "131",
+        "title": "Ch50: Continuous-Time Markov Chains",
+        "chapter_number": 50,
+        "tier": "advanced",
+        "file": "chapters/probability/50-continuous-markov.qmd",
+        "prerequisites": [48, 49],
+        "estimated_time_minutes": 75,
+        "content": [
+          "50.1 From discrete to continuous time — exponential holding times",
+          "50.2 Generator matrix Q — transition rates, Q_{ij} for i≠j, Q_{ii} = -Σ Q_{ij}",
+          "50.3 Kolmogorov equations — forward and backward, P'(t) = P(t)Q",
+          "50.4 Stationary distribution — πQ = 0",
+          "50.5 Birth-death processes — special case with transitions only to neighbors",
+          "50.6 Queuing theory basics — M/M/1, M/M/c, Little's law (L = λW)",
+          "50.7 Clinical: hospital bed occupancy, ICU patient flow, staffing models"
+        ],
+        "ojs_demos": [
+          {"title": "Birth-Death Process Simulator", "description": "States 0, 1, 2, ..., N (e.g., number of patients in unit). Birth rates λ_i, death rates μ_i. Animate population over time. Show stationary distribution. Compute utilization ρ = λ/μ."},
+          {"title": "M/M/1 Queue Simulator", "description": "Arrival rate λ, service rate μ. Animate: patients arrive, join queue, get served, leave. Show queue length over time. Show waiting time distribution. Compute L, W, L_q, W_q. Show what happens as ρ → 1 (explosion)."},
+          {"title": "Hospital Bed Planner", "description": "Input: admission rate, average LOS, number of beds. Model as M/M/c queue. Compute: occupancy rate, probability of all beds full, expected waiting time for bed. Slider: number of beds to find optimal staffing."}
+        ]
+      },
+      {
+        "id": "132",
+        "title": "Ch51: Martingales — Fair Games and Sequential Analysis",
+        "chapter_number": 51,
+        "tier": "advanced",
+        "file": "chapters/probability/51-martingales.qmd",
+        "prerequisites": [44, 48],
+        "estimated_time_minutes": 75,
+        "content": [
+          "51.1 Definition — E(X_{n+1} | X_1,...,X_n) = X_n (conditional expectation equals current value)",
+          "51.2 Examples: random walk (fair game), partial sums of mean-zero RVs, likelihood ratios",
+          "51.3 Submartingales and supermartingales — E(X_{n+1}|...) ≥ X_n or ≤ X_n",
+          "51.4 Optional stopping theorem — expected value preserved at stopping times (with conditions)",
+          "51.5 Doob's martingale convergence theorem — bounded martingales converge a.s.",
+          "51.6 Applications to sequential testing — SPRT as martingale, Wald's equation",
+          "51.7 Clinical: interim analysis stopping rules, group sequential trials, the mathematical foundation of Data Safety Monitoring Boards"
+        ],
+        "ojs_demos": [
+          {"title": "Martingale Visualizer", "description": "Simulate a martingale (fair random walk). Show multiple paths. Compute running conditional expectation. Verify E(X_{n+1}|X_n) = X_n by simulation. Compare: submartingale (favorable game), supermartingale (unfavorable)."},
+          {"title": "Optional Stopping", "description": "Fair random walk. Define stopping rule: stop when X hits a or -b. Run 10,000 simulations. Verify E(X_τ) = 0 = X_0. Show P(hitting a) = b/(a+b). Gambler's ruin from martingale perspective."},
+          {"title": "Sequential Probability Ratio Test", "description": "SPRT for testing H₀: p=p₀ vs H₁: p=p₁. Plot log-likelihood ratio as data arrives. Show upper and lower boundaries (Wald). Stop when boundary crossed. Show ASN (average sample number) < fixed-sample test."}
+        ]
+      },
+      {
+        "id": "133",
+        "title": "Ch52: Bayesian Probability — Theory and Computation",
+        "chapter_number": 52,
+        "tier": "advanced",
+        "file": "chapters/probability/52-bayesian-theory.qmd",
+        "prerequisites": [33, 35, 39],
+        "estimated_time_minutes": 90,
+        "content": [
+          "52.1 Bayesian framework — prior × likelihood = posterior (up to normalizing constant)",
+          "52.2 Conjugate families — Beta-Binomial, Normal-Normal, Gamma-Poisson, Dirichlet-Multinomial",
+          "52.3 Non-conjugate models — when closed-form posteriors don't exist",
+          "52.4 Loss functions and Bayesian decision theory — squared error, 0-1, absolute",
+          "52.5 Bayesian point estimation — posterior mean, MAP, posterior median",
+          "52.6 Credible intervals — highest posterior density (HPD) vs equal-tailed",
+          "52.7 Bayesian hypothesis testing — Bayes factors, posterior odds",
+          "52.8 Prior elicitation — informative, weakly informative, reference priors, Jeffreys' prior",
+          "52.9 Hierarchical models — priors on priors, shrinkage, borrowing strength",
+          "52.10 Clinical: Bayesian clinical trial design, adaptive trials, prior specification for medical devices (FDA guidance)"
+        ],
+        "ojs_demos": [
+          {"title": "Conjugate Prior Laboratory", "description": "Dropdown: Beta-Binomial, Normal-Normal, Gamma-Poisson. Set prior parameters. Add data one observation at a time. Watch posterior update in real-time. Show prior → posterior → next prior chain. Compute posterior mean, credible interval, Bayes factor. THE comprehensive Bayesian demo."},
+          {"title": "Prior Sensitivity Analysis", "description": "Same likelihood. Three different priors (informative, weakly informative, diffuse). Show three posteriors. As n increases, all converge. Show when prior matters (small n) vs when it doesn't (large n). Compute Bayes factor sensitivity."},
+          {"title": "HPD vs Equal-Tailed Interval", "description": "Skewed posterior. Show both interval types. HPD is shorter. Equal-tailed is easier to compute. Slider: credibility level (0.50 to 0.99). Show both intervals on the posterior density."},
+          {"title": "Bayes Factor Calculator", "description": "Two models M₁ and M₂. Input data. Compute marginal likelihood for each. BF = p(data|M₁)/p(data|M₂). Show Jeffreys' scale of evidence. Compare to p-value for same data."},
+          {"title": "Hierarchical Model Shrinkage", "description": "Multiple groups with different sample sizes. Show raw group means. Show hierarchical Bayesian estimates (shrunk toward grand mean). Small groups shrink more. Visualize the bias-variance tradeoff of shrinkage."}
+        ],
+        "webr_analysis": "Upload data → specify prior family → compute posterior → credible intervals → Bayes factor → prior sensitivity check → report"
+      },
+      {
+        "id": "134",
+        "title": "Ch53: Information Theory and Entropy",
+        "chapter_number": 53,
+        "tier": "advanced",
+        "file": "chapters/probability/53-information-theory.qmd",
+        "prerequisites": [34, 35, 37],
+        "estimated_time_minutes": 75,
+        "content": [
+          "53.1 Shannon entropy — H(X) = -Σ p(x) log p(x), uncertainty quantified",
+          "53.2 Properties: non-negativity, maximized by Uniform, bits vs nats",
+          "53.3 Joint entropy, conditional entropy — H(X,Y), H(Y|X)",
+          "53.4 Mutual information — I(X;Y) = H(X) + H(Y) - H(X,Y), shared information",
+          "53.5 KL divergence — D_{KL}(P||Q), not symmetric, always ≥ 0, connection to likelihood ratio",
+          "53.6 Cross-entropy — H(P,Q), connection to log-loss in machine learning",
+          "53.7 Fisher information — I(θ) = E[(d/dθ log f(X|θ))²], precision of estimation",
+          "53.8 Cramér-Rao lower bound — Var(θ̂) ≥ 1/I(θ), best possible precision",
+          "53.9 Clinical: entropy of diagnostic tests, information gain from additional tests, AIC/BIC as information criteria"
+        ],
+        "ojs_demos": [
+          {"title": "Entropy Calculator", "description": "Input discrete probability distribution (bar heights). Compute H(X). Show contribution of each outcome: -p log p. Most uncertain = highest entropy = Uniform. Slider: adjust probabilities, watch entropy change."},
+          {"title": "Mutual Information Venn Diagram", "description": "H(X) and H(Y) as circles. Overlap = I(X;Y). H(X,Y) = total area. H(X|Y) = H(X) - I(X;Y). Adjust joint distribution, watch Venn diagram change. Independent: circles don't overlap."},
+          {"title": "KL Divergence Visualizer", "description": "Two distributions P and Q. Show both PDFs. Compute D_KL(P||Q) and D_KL(Q||P) — show they're different (not symmetric). Show pointwise contribution: p(x) log(p(x)/q(x)). Clinical: how different is this patient population from the trial population?"},
+          {"title": "Fisher Information and CRLB", "description": "Select distribution family (Binomial, Normal, Poisson). Parameter slider. Compute Fisher information I(θ). Show Cramér-Rao bound: best any unbiased estimator can do. Compare MLE variance to CRLB. Show: MLE achieves CRLB (is efficient) for exponential families."}
+        ]
+      },
+      {
+        "id": "135",
+        "title": "Ch54: Maximum Likelihood and Estimation Theory",
+        "chapter_number": 54,
+        "tier": "advanced",
+        "file": "chapters/probability/54-maximum-likelihood.qmd",
+        "prerequisites": [35, 39, 53],
+        "estimated_time_minutes": 90,
+        "content": [
+          "54.1 Point estimation — estimators vs estimates, properties (unbiased, consistent, efficient)",
+          "54.2 Method of moments — match sample moments to distribution moments",
+          "54.3 Maximum likelihood — L(θ|x), log-likelihood, score equation",
+          "54.4 Properties of MLE — consistency, asymptotic normality, efficiency, invariance",
+          "54.5 MLE for common distributions — Normal, Binomial, Poisson, Exponential, Gamma",
+          "54.6 Confidence intervals from MLE — Wald, profile likelihood, likelihood ratio",
+          "54.7 EM algorithm — when data is incomplete, E-step/M-step, convergence",
+          "54.8 Sufficient statistics — Rao-Blackwell, Lehmann-Scheffé, MVUE",
+          "54.9 Clinical: fitting distributions to clinical data, mixture models for heterogeneous populations, MLE in survival analysis"
+        ],
+        "ojs_demos": [
+          {"title": "Likelihood Function Explorer", "description": "Observe data (adjustable). Select distribution family. Plot L(θ) or log L(θ) vs θ. Mark MLE (peak). Show profile likelihood CI. Compare to Wald CI. Animate: add data points one at a time, watch likelihood sharpen."},
+          {"title": "MLE for Normal Distribution", "description": "Generate data from N(μ,σ²). Show log-likelihood surface over (μ,σ²) space. Contour plot. Mark MLE at peak. Show that μ̂ = x̄ and σ̂² = (1/n)Σ(xᵢ-x̄)² (biased!). Compare to s² (unbiased). Show asymptotic normality of MLE."},
+          {"title": "EM Algorithm Step-by-Step", "description": "Mixture of two Normals. Data is unlabeled. E-step: compute responsibilities (soft assignments). M-step: update parameters. Animate iteration by iteration. Watch log-likelihood increase monotonically. Show convergence."},
+          {"title": "Method of Moments vs MLE", "description": "Same data. Fit with MoM and MLE. Compare estimates. Show that MLE is more efficient (smaller variance). Demonstrate with Gamma distribution where difference is visible."}
+        ],
+        "webr_analysis": "Upload data → fit distributions via MLE and MoM → compare AIC/BIC → profile likelihood CIs → goodness-of-fit diagnostics → EM for mixture models"
+      }
+    ],
+
+    "chapters_expert": [
+      {
+        "id": "136",
+        "title": "Ch55: Brownian Motion and Diffusion",
+        "chapter_number": 55,
+        "tier": "expert",
+        "file": "chapters/probability/55-brownian-motion.qmd",
+        "prerequisites": [47, 51],
+        "estimated_time_minutes": 75,
+        "content": [
+          "55.1 Brownian motion as limit of random walks — Donsker's theorem",
+          "55.2 Properties: continuous paths, independent increments, Normal increments, nowhere differentiable",
+          "55.3 Brownian motion as martingale — E(W(t)|F_s) = W(s)",
+          "55.4 Geometric Brownian motion — dS = μS dt + σS dW, stock prices, biomarker trajectories",
+          "55.5 First passage times — distribution, connection to inverse Gaussian",
+          "55.6 Brownian bridge — conditioned to return to origin, connection to goodness-of-fit (KS test)",
+          "55.7 Clinical: continuous biomarker monitoring, pharmacokinetic models, diffusion MRI"
+        ],
+        "ojs_demos": [
+          {"title": "Brownian Motion Simulator", "description": "Animate Brownian paths. Show 10 simultaneous paths. Verify properties: E(W(t))=0, Var(W(t))=t. Zoom in: paths are self-similar. Show that |W(t+h)-W(t)|/√h → N(0,1)."},
+          {"title": "Random Walk to Brownian Motion", "description": "Start with discrete random walk. Increase step frequency and decrease step size simultaneously (Donsker scaling). Watch discrete path converge to continuous Brownian path. Animated transition."},
+          {"title": "Geometric Brownian Motion", "description": "Model asset price: dS/S = μdt + σdW. Sliders: μ (drift), σ (volatility). Generate paths. Show log-normal distribution of S(t). Compute P(S(t) > threshold). Clinical: tumor growth modeling."}
+        ]
+      },
+      {
+        "id": "137",
+        "title": "Ch56: Monte Carlo Methods",
+        "chapter_number": 56,
+        "tier": "expert",
+        "file": "chapters/probability/56-monte-carlo.qmd",
+        "prerequisites": [42, 52],
+        "estimated_time_minutes": 90,
+        "content": [
+          "56.1 Simple Monte Carlo integration — E[g(X)] ≈ (1/n)Σg(X_i)",
+          "56.2 Variance reduction: importance sampling — weight by proposal/target ratio",
+          "56.3 Variance reduction: antithetic variates — negative correlation trick",
+          "56.4 Variance reduction: control variates — use known expectations",
+          "56.5 Variance reduction: stratified sampling — partition and sample each stratum",
+          "56.6 Markov Chain Monte Carlo — Metropolis-Hastings algorithm",
+          "56.7 Gibbs sampling — special case of MH for conditional distributions",
+          "56.8 MCMC diagnostics — trace plots, autocorrelation, R-hat, ESS, burn-in",
+          "56.9 Hamiltonian Monte Carlo — NUTS (the algorithm behind Stan/Turing.jl)",
+          "56.10 Clinical: MCMC for Bayesian clinical trials, pharmacokinetic modeling, complex hierarchical models"
+        ],
+        "ojs_demos": [
+          {"title": "Monte Carlo Integration", "description": "Estimate ∫g(x)f(x)dx by sampling. Show function, samples, running average. Convergence plot with CI band narrowing as n grows. Compare: simple MC, importance sampling, control variates. Show variance reduction ratios."},
+          {"title": "Metropolis-Hastings Visualizer", "description": "2D target distribution (e.g., banana-shaped, bimodal). Show proposal distribution. Animate: propose, accept/reject, move/stay. Show trace plots, burn-in, mixing. Autocorrelation. Tune proposal variance — too small (slow mixing) vs too large (many rejections). THE MCMC demo."},
+          {"title": "Gibbs Sampler", "description": "Bivariate target. Alternate: sample X|Y, then Y|X. Animate the zig-zag path. Show marginal histograms building up. Compare to direct Metropolis-Hastings on same target."},
+          {"title": "MCMC Diagnostics Dashboard", "description": "Run MCMC chain. Show: trace plot, ACF plot, running mean, R-hat (with multiple chains), ESS. Traffic light system: green (converged), yellow (questionable), red (not converged). Recommend: more iterations, thinning, or reparameterization."},
+          {"title": "Importance Sampling", "description": "Estimate P(rare event) via importance sampling. Show: original distribution (almost no samples in tail), proposal distribution (concentrated in tail), weights, weighted estimate. Compare efficiency to naive MC. Clinical: rare adverse event probability estimation."}
+        ],
+        "webr_analysis": "Specify Bayesian model → run MCMC via R → full diagnostics → posterior summaries → credible intervals → model comparison via WAIC/LOO"
+      },
+      {
+        "id": "138",
+        "title": "Ch57: Random Graphs and Network Probability",
+        "chapter_number": 57,
+        "tier": "expert",
+        "file": "chapters/probability/57-random-graphs.qmd",
+        "prerequisites": [48, 44],
+        "estimated_time_minutes": 75,
+        "content": [
+          "57.1 Erdős-Rényi random graphs — G(n,p), phase transition at p = 1/n",
+          "57.2 Degree distribution — Binomial for ER, power-law for scale-free",
+          "57.3 Small-world networks — Watts-Strogatz model, clustering + short paths",
+          "57.4 Scale-free networks — Barabási-Albert preferential attachment",
+          "57.5 Epidemic models on networks — SIR/SIS, basic reproduction number R₀",
+          "57.6 Percolation — threshold for giant component, bond vs site percolation",
+          "57.7 Clinical: disease transmission networks, hospital contact networks, social determinants, genomic networks"
+        ],
+        "ojs_demos": [
+          {"title": "Random Graph Explorer", "description": "Generate G(n,p). Slider: n (5-200), p (0-1). Visualize graph (force-directed layout). Show degree distribution. Highlight giant component. Show phase transition at p ≈ 1/n: sudden emergence of giant component."},
+          {"title": "Epidemic Simulator on Network", "description": "SIR model on a random graph. Patient zero infects neighbors with probability β. Recovery rate γ. R₀ = β/γ × average degree. Animate spread. Show epidemic curve (new infections vs time). Compare ER vs scale-free networks."},
+          {"title": "Small World Demo", "description": "Start with ring lattice. Slider: rewiring probability p. Show clustering coefficient and average path length vs p. The 'sweet spot': high clustering + short paths. Six degrees of separation."}
+        ]
+      },
+      {
+        "id": "139",
+        "title": "Ch58: Probability in Machine Learning",
+        "chapter_number": 58,
+        "tier": "expert",
+        "file": "chapters/probability/58-probability-ml.qmd",
+        "prerequisites": [52, 54],
+        "estimated_time_minutes": 90,
+        "content": [
+          "58.1 Probabilistic classification — Bayes optimal classifier, Naive Bayes",
+          "58.2 Logistic regression as probabilistic model — MLE, connection to exponential family",
+          "58.3 Gaussian processes — infinite-dimensional Normal, non-parametric regression",
+          "58.4 Expectation-Maximization — full treatment with convergence proof",
+          "58.5 Variational inference — ELBO, mean-field approximation",
+          "58.6 PAC learning — probably approximately correct, VC dimension",
+          "58.7 Concentration inequalities in ML — Hoeffding, McDiarmid, matrix concentration",
+          "58.8 Clinical: probabilistic diagnosis, calibrated prediction, uncertainty quantification"
+        ],
+        "ojs_demos": [
+          {"title": "Naive Bayes Classifier", "description": "Two classes, two features. Show class-conditional distributions. Compute posteriors. Decision boundary. Add data points, watch boundary shift. Show when 'naive' assumption fails."},
+          {"title": "Gaussian Process Demo", "description": "Prior: sample functions from GP (mean=0, kernel=RBF). Observe data points. Posterior: sample functions conditioned on data. Show mean function + uncertainty band. Slider: kernel length scale. Clinical: smooth biomarker trajectory estimation."},
+          {"title": "Calibration and Uncertainty", "description": "Train a model. Show reliability diagram (predicted probability vs observed frequency). Compute ECE (expected calibration error). Apply Platt scaling or isotonic regression. Show before/after calibration."}
+        ]
+      },
+      {
+        "id": "140",
+        "title": "Ch59: Measure-Theoretic Probability — Essential Concepts",
+        "chapter_number": 59,
+        "tier": "expert",
+        "file": "chapters/probability/59-measure-theory.qmd",
+        "prerequisites": [44, 51],
+        "estimated_time_minutes": 90,
+        "content": [
+          "59.1 Why measure theory? — limitations of elementary probability for continuous/infinite cases",
+          "59.2 σ-algebras — information, filtrations, measurability (intuitive treatment)",
+          "59.3 Probability measures — Kolmogorov axioms formalized",
+          "59.4 Random variables as measurable functions — unifying discrete and continuous",
+          "59.5 Lebesgue integral — E(X) = ∫X dP, why it generalizes both sums and Riemann integrals",
+          "59.6 Product spaces and Fubini's theorem — joint distributions justified",
+          "59.7 Radon-Nikodym theorem — densities as derivatives of measures",
+          "59.8 Conditional expectation as projection — E(Y|G) in Hilbert space, best L² predictor",
+          "59.9 Why this matters for applied researchers — understanding assumptions behind every test, when methods break down"
+        ],
+        "ojs_demos": [
+          {"title": "σ-Algebra Information Demo", "description": "Finite sample space Ω. Show all possible σ-algebras (coarsest to finest). Demonstrate: more information = finer σ-algebra = more events distinguishable. Filtration: σ-algebras growing over time as information arrives."},
+          {"title": "Riemann vs Lebesgue Integration", "description": "Pathological function (e.g., Dirichlet function). Riemann integral fails. Lebesgue integral works by partitioning the range instead of the domain. Visual: horizontal slicing vs vertical slicing."},
+          {"title": "Conditional Expectation as Projection", "description": "L² space of random variables. E(Y|X) is the projection of Y onto the space of X-measurable functions. Visual: 3D vector analogy. Show that Y - E(Y|X) is orthogonal to X-measurable functions (prediction residual is uncorrelated with predictor)."}
+        ]
+      },
+      {
+        "id": "141",
+        "title": "Ch60: Capstone — Probability in Clinical Decision Making",
+        "chapter_number": 60,
+        "tier": "expert",
+        "file": "chapters/probability/60-capstone.qmd",
+        "prerequisites": "ALL chapters 31-59",
+        "estimated_time_minutes": 120,
+        "content": [
+          "60.1 The probabilistic clinician — every diagnosis is a probability, every treatment is a gamble",
+          "60.2 Decision trees and expected utility — structuring clinical decisions",
+          "60.3 Value of information — EVPI, EVSI, when is an additional test worth doing?",
+          "60.4 Threshold analysis — treatment threshold, test threshold, test-treatment threshold",
+          "60.5 Sequential decision making under uncertainty — dynamic programming, POMDP basics",
+          "60.6 Probabilistic sensitivity analysis — uncertainty propagation through decision models",
+          "60.7 Calibration and clinical judgment — are physicians well-calibrated probabilistic thinkers?",
+          "60.8 Communicating probability to patients — absolute vs relative risk, natural frequencies, icon arrays",
+          "60.9 The future: probabilistic AI in clinical decision support",
+          "60.10 Master probability concept map — connecting all 30 chapters"
+        ],
+        "ojs_demos": [
+          {"title": "Clinical Decision Tree Builder", "description": "Drag-and-drop: decision nodes (squares), chance nodes (circles), terminal nodes (triangles). Input probabilities and utilities. Fold back the tree. Show optimal strategy. One-way and two-way sensitivity analysis. Tornado diagram."},
+          {"title": "Value of Information Calculator", "description": "Base case decision. Compute EVPI: maximum you'd pay for perfect information. Compute EVSI for a specific diagnostic test. Show: if EVSI < test cost → don't test. Interactive sliders for test accuracy and disease prevalence."},
+          {"title": "Threshold Analysis", "description": "Treatment threshold P_t: treat if P(disease) > P_t. Test threshold P_{test}: test if P(disease) is between P_{test-} and P_{test+}. Sliders: treatment benefit/harm ratio, test sensitivity/specificity. Show optimal strategy zones."},
+          {"title": "Risk Communication Workshop", "description": "Same risk expressed as: absolute risk, relative risk, OR, NNT, natural frequency (1 in X), icon array. Let user toggle between representations. Quiz: which representation do patients understand best? Evidence from health literacy research."},
+          {"title": "Master Concept Map", "description": "Interactive D3 force-directed graph connecting all probability concepts from Ch31-60. Click any node to navigate to that chapter. Color by tier. Show prerequisite paths. Search by topic. THE capstone integrative visualization."}
+        ],
+        "webr_analysis": "Upload clinical scenario parameters → build decision tree → compute expected utility → sensitivity analysis → optimal strategy report → patient communication materials"
+      }
+    ],
+
+    "integration": [
+      {
+        "id": "150",
+        "title": "Probability Part Integration",
+        "phase": "integration",
+        "prerequisites": ["All chapters 31-60 complete"],
+        "tasks": [
+          "Add Part 'Probability' to _quarto.yml with all 30 chapters in correct order",
+          "Verify all cross-references between probability chapters (31-60) resolve",
+          "Verify cross-references FROM probability chapters TO biostatistics chapters (1-30) and vice versa",
+          "Add 'Key Probability Concepts' callout boxes in biostatistics chapters linking to relevant probability chapters",
+          "Add 'Statistical Application' callout boxes in probability chapters linking to relevant biostatistics chapters",
+          "Full quarto render — all 60 chapters + appendices",
+          "Fix broken references"
+        ]
+      },
+      {
+        "id": "151",
+        "title": "Probability Assessment & Polish",
+        "phase": "integration",
+        "prerequisites": ["150"],
+        "tasks": [
+          "Verify all 100+ OJS demos across Ch31-60 load and function correctly",
+          "Verify all WebR blocks execute",
+          "Run statistical validation: OJS prob-engine.js computations match R within 1e-10",
+          "Verify all 6 new sample datasets load correctly",
+          "Lighthouse audit on 5 representative probability chapters",
+          "Add probability chapters to progress tracking system",
+          "Update landing page (index.qmd) with probability part description",
+          "Generate updated PDF of complete textbook (60 chapters)"
+        ]
+      }
+    ]
+  }
+}
