@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 9 – Chi-Square Tests</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 9</li>
+        <li>Chi-Square Tests</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 9</div>
+        <h1>Chi-Square Tests</h1>
+        <p>Use chi-square tests to analyse <strong>categorical data</strong> — asking whether observed frequencies match expected ones, or whether two categorical variables are associated.</p>
+      </div>
+
+      <!-- 9.1 -->
+      <section class="section">
+        <h2>9.1 Goodness-of-Fit Test</h2>
+        <p>Tests whether observed frequencies in <em>one</em> categorical variable match a set of expected (hypothesised) frequencies.</p>
+        <div class="formula">H₀: The observed frequencies match the expected distribution</div>
+        <div class="formula">χ² = Σ [(Oᵢ − Eᵢ)² / Eᵢ] &emsp; df = k − 1</div>
+        <p>where k = number of categories, O = observed count, E = expected count.</p>
+        <p><strong>Assumption:</strong> Expected count ≥ 5 in each cell.</p>
+      </section>
+
+      <!-- 9.2 -->
+      <section class="section">
+        <h2>9.2 Test of Independence</h2>
+        <p>Tests whether two categorical variables are <strong>independent</strong> in a contingency table.</p>
+        <div class="formula">H₀: Variable A and Variable B are independent (no association)</div>
+        <div class="formula">Eᵢⱼ = (row total × column total) / grand total</div>
+        <div class="formula">χ² = Σ [(Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ] &emsp; df = (rows−1)(cols−1)</div>
+
+        <div class="callout callout-info">
+          <strong>Example</strong>
+          Is there an association between smoking (yes/no) and lung disease (yes/no)? Enter observed counts in the 2×2 table below.
+        </div>
+      </section>
+
+      <!-- 9.3 Interactive -->
+      <section class="section">
+        <h2>9.3 Interactive: Chi-Square Test of Independence</h2>
+        <p>Enter the observed counts in the contingency table. The calculator computes expected counts, chi-square, and the p-value.</p>
+
+        <div class="widget">
+          <div class="widget-title">📊 Chi-Square Contingency Table Calculator</div>
+
+          <div class="form-group">
+            <label>Table size</label>
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+              <label style="font-weight:normal"><input type="radio" name="tableSize" value="2x2" checked> 2 × 2</label>
+              <label style="font-weight:normal"><input type="radio" name="tableSize" value="2x3"> 2 × 3</label>
+              <label style="font-weight:normal"><input type="radio" name="tableSize" value="3x2"> 3 × 2</label>
+              <label style="font-weight:normal"><input type="radio" name="tableSize" value="3x3"> 3 × 3</label>
+            </div>
+          </div>
+
+          <div id="tableInputArea" style="overflow-x:auto;margin-top:1rem"></div>
+          <button class="btn btn-primary" id="runChi" style="margin-top:1rem">Run Chi-Square Test</button>
+          <button class="btn btn-outline btn-sm" id="loadChiExample" style="margin-left:.5rem;margin-top:1rem">Load Example</button>
+
+          <div id="chiResult" class="result-box" style="display:none;margin-top:1rem"></div>
+          <div id="chiError"  class="callout callout-danger" style="display:none;margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 9.4 Odds Ratio -->
+      <section class="section">
+        <h2>9.4 Measures of Association: Odds Ratio and Relative Risk</h2>
+        <p>A chi-square test tells us <em>whether</em> an association exists, but not its <em>strength</em>.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Measure</th><th>Formula (2×2 table)</th><th>Used in</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Odds Ratio (OR)</td>
+                <td>(a×d) / (b×c)</td>
+                <td>Case-control studies</td>
+              </tr>
+              <tr>
+                <td>Relative Risk (RR)</td>
+                <td>[a/(a+b)] / [c/(c+d)]</td>
+                <td>Cohort studies, RCTs</td>
+              </tr>
+              <tr>
+                <td>Risk Difference (ARD)</td>
+                <td>a/(a+b) − c/(c+d)</td>
+                <td>Absolute risk difference</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.85rem;color:var(--muted)">Table: a=exposed cases, b=unexposed cases, c=exposed controls, d=unexposed controls (or similar 2×2 layout).</p>
+      </section>
+
+      <!-- Quiz -->
+      <section class="section">
+        <h2>9.5 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+          <div id="q1">
+            <p><strong>Q1.</strong> A 3 × 4 contingency table has how many degrees of freedom for a chi-square test of independence?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> 6</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> 12</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> 7</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> 3</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+          <div id="q2">
+            <p><strong>Q2.</strong> The minimum expected cell count for the chi-square test to be valid is:</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> 1</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> 5</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> 10</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> 30</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter8.html">← Chapter 8: t-Tests</a>
+        <a href="chapter10.html">Chapter 10: Correlation &amp; Regression →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 9</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* ── Build table input ── */
+  function getTableDims(val) {
+    const [r,c] = val.split('x').map(Number);
+    return {rows:r, cols:c};
+  }
+
+  function buildTable(rows, cols) {
+    const rowLabels = rows===2?['Row 1','Row 2']:['Row 1','Row 2','Row 3'];
+    const colLabels = cols===2?['Col 1','Col 2']:cols===3?['Col 1','Col 2','Col 3']:['Col 1','Col 2','Col 3','Col 4'];
+    let html = '<table><thead><tr><th></th>';
+    colLabels.slice(0,cols).forEach(l => html += `<th>${l}</th>`);
+    html += '</tr></thead><tbody>';
+    for (let r=0;r<rows;r++) {
+      html += `<tr><td style="font-weight:600">${rowLabels[r]}</td>`;
+      for (let c=0;c<cols;c++) {
+        html += `<td><input type="number" class="form-control cell-input" data-r="${r}" data-c="${c}" value="" min="0" step="1" style="width:80px;text-align:center"></td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    document.getElementById('tableInputArea').innerHTML = html;
+  }
+
+  function getCurrentDims() {
+    return getTableDims(document.querySelector('input[name=tableSize]:checked').value);
+  }
+
+  document.querySelectorAll('input[name=tableSize]').forEach(r => r.addEventListener('change', () => {
+    const {rows,cols} = getTableDims(r.value);
+    buildTable(rows,cols);
+  }));
+
+  buildTable(2,2);
+
+  /* Load example (smoking vs lung disease) */
+  document.getElementById('loadChiExample').addEventListener('click', () => {
+    document.querySelector('input[name=tableSize][value="2x2"]').checked = true;
+    buildTable(2,2);
+    const vals = [[70,30],[20,80]];
+    document.querySelectorAll('.cell-input').forEach(inp => {
+      inp.value = vals[+inp.dataset.r][+inp.dataset.c];
+    });
+  });
+
+  /* Run chi-square */
+  document.getElementById('runChi').addEventListener('click', () => {
+    const err = document.getElementById('chiError');
+    const res = document.getElementById('chiResult');
+    err.style.display = 'none';
+    res.style.display = 'none';
+
+    const {rows,cols} = getCurrentDims();
+    const observed = Array.from({length:rows},(_,r) =>
+      Array.from({length:cols},(_,c) => {
+        const val = +document.querySelector(`.cell-input[data-r="${r}"][data-c="${c}"]`).value;
+        return isNaN(val) ? 0 : val;
+      })
+    );
+
+    // Validate
+    const N = observed.flat().reduce((s,v)=>s+v,0);
+    if (N === 0) { err.textContent='Please enter observed counts.'; err.style.display='block'; return; }
+
+    try {
+      const result = Stats.chiSquareTest(observed);
+      const rowTotals = observed.map(r => r.reduce((s,v)=>s+v,0));
+      const colTotals = Array.from({length:cols},(_,j)=>observed.reduce((s,r)=>s+r[j],0));
+      const expected  = observed.map((r,i)=>r.map((_,j)=>rowTotals[i]*colTotals[j]/N));
+      const minE = Math.min(...expected.flat());
+      const sig = result.pValue < 0.05;
+
+      // Build expected table HTML
+      let expHTML = '<table><thead><tr><th></th>';
+      for(let c=0;c<cols;c++) expHTML+=`<th>Col ${c+1}</th>`;
+      expHTML+='<th>Total</th></tr></thead><tbody>';
+      for(let r=0;r<rows;r++){
+        expHTML+=`<tr><td>Row ${r+1}</td>`;
+        for(let c=0;c<cols;c++) expHTML+=`<td>${Stats.round(expected[r][c],2)}</td>`;
+        expHTML+=`<td><strong>${rowTotals[r]}</strong></td></tr>`;
+      }
+      expHTML+='<tr><td><strong>Total</strong></td>';
+      colTotals.forEach(ct=>expHTML+=`<td><strong>${ct}</strong></td>`);
+      expHTML+=`<td><strong>${N}</strong></td></tr></tbody></table>`;
+
+      res.style.display = 'block';
+      res.innerHTML = `
+        <h4>Expected Counts</h4>
+        <div class="table-wrap">${expHTML}</div>
+        ${minE < 5 ? '<div class="callout callout-warning" style="margin-top:.75rem"><strong>⚠️</strong> Some expected counts &lt; 5. Consider Fisher\'s Exact Test.</div>' : ''}
+        <h4 style="margin-top:1rem">Test Results</h4>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>χ² statistic</td><td>${Stats.round(result.chi2,4)}</td></tr>
+            <tr><td>Degrees of freedom</td><td>${result.df}</td></tr>
+            <tr><td>p-value</td><td>${Stats.pValueLabel(result.pValue)}</td></tr>
+            <tr><td>Decision (α=0.05)</td><td><strong style="color:${sig?'var(--danger)':'var(--success)'}">${sig?'Reject H₀: significant association':'Fail to reject H₀: no significant association'}</strong></td></tr>
+          </tbody>
+        </table></div>`;
+
+    } catch(e) {
+      err.textContent = e.message;
+      err.style.display = 'block';
+    }
+  });
+
+  /* Quiz */
+  const answers={q1:'a',q2:'b'};
+  const exp={q1:'✅ Correct! df = (rows−1)(cols−1) = (3−1)(4−1) = 2×3 = <strong>6</strong>.', q2:'✅ Correct! The standard rule is expected count ≥ <strong>5</strong> in each cell.'};
+  const wrong={q1:'❌ df = (rows−1)(cols−1) = (3−1)(4−1) = 2×3 = 6.', q2:'❌ The conventional requirement is expected count ≥ 5 in each cell.'};
+  document.getElementById('checkQ').addEventListener('click',()=>{
+    ['q1','q2'].forEach(id=>{
+      const sel=document.querySelector(`input[name=${id}]:checked`);
+      const fb=document.getElementById(`${id}-fb`);
+      if(!sel){fb.innerHTML='Please select.';fb.className='quiz-feedback incorrect';return;}
+      const ok=sel.value===answers[id];
+      fb.innerHTML=ok?exp[id]:wrong[id];
+      fb.className='quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp=>{
+        inp.closest('.quiz-option').className='quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

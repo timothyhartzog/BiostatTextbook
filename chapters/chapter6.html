@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 6 – Sampling Distributions &amp; the CLT</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 6</li>
+        <li>Sampling &amp; CLT</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 6</div>
+        <h1>Sampling Distributions &amp; the Central Limit Theorem</h1>
+        <p>Why can we make inferences about populations using small samples? The Central Limit Theorem is the key reason — explore it through simulation.</p>
+      </div>
+
+      <!-- 6.1 -->
+      <section class="section">
+        <h2>6.1 Sampling Distributions</h2>
+        <p>When we draw many samples from a population and calculate a statistic (e.g., the mean) from each sample, the distribution of those statistics is called the <strong>sampling distribution</strong> of the statistic.</p>
+        <p>The sampling distribution of the sample mean x̄ has:</p>
+        <ul>
+          <li>Mean = μ (population mean)</li>
+          <li>Standard deviation = σ / √n (called the <strong>Standard Error</strong>)</li>
+        </ul>
+        <div class="formula">SE(x̄) = σ / √n</div>
+        <p>As n increases, SE decreases — larger samples give more precise estimates.</p>
+      </section>
+
+      <!-- 6.2 -->
+      <section class="section">
+        <h2>6.2 The Central Limit Theorem (CLT)</h2>
+        <div class="callout callout-success">
+          <strong>🎯 Central Limit Theorem</strong>
+          If samples of size n are drawn from <em>any</em> population with mean μ and finite variance σ², then for large enough n the sampling distribution of x̄ is approximately <strong>normal</strong>, regardless of the shape of the population.
+        </div>
+        <p>Rule of thumb: n ≥ 30 is usually sufficient; less is needed for symmetric populations.</p>
+        <p>The CLT is why the normal distribution is central to statistical inference — it justifies applying normal-based tests even when the population is not perfectly normal.</p>
+      </section>
+
+      <!-- 6.3 Confidence Intervals -->
+      <section class="section">
+        <h2>6.3 Confidence Intervals</h2>
+        <p>A <strong>confidence interval (CI)</strong> is a range of values likely to contain the true population parameter. For the mean of a large sample:</p>
+        <div class="formula">95% CI: x̄ ± 1.96 × (σ / √n)</div>
+        <p>If σ is unknown (the usual case), use the sample s and t-distribution:</p>
+        <div class="formula">95% CI: x̄ ± t* × (s / √n)</div>
+        <p>where t* is the critical value from the t-distribution with n−1 degrees of freedom.</p>
+
+        <div class="callout callout-warning">
+          <strong>⚠️ Correct Interpretation</strong>
+          A 95% CI does <em>not</em> mean "there's a 95% chance the true mean is in this interval." It means: if we repeated the study many times, 95% of the intervals constructed would contain the true mean.
+        </div>
+      </section>
+
+      <!-- 6.4 Interactive CLT Simulation -->
+      <section class="section">
+        <h2>6.4 Interactive: CLT Simulation</h2>
+        <p>Choose a population distribution shape, set the sample size, and repeatedly draw samples. Watch the distribution of sample means become normal.</p>
+
+        <div class="widget">
+          <div class="widget-title">🎲 Central Limit Theorem Simulator</div>
+          <div class="input-row">
+            <div class="form-group">
+              <label for="popShape">Population Shape</label>
+              <select id="popShape" class="form-control">
+                <option value="uniform">Uniform (0–10)</option>
+                <option value="exponential">Exponential (right-skewed)</option>
+                <option value="bimodal">Bimodal</option>
+                <option value="normal" selected>Normal (μ=5, σ=1.5)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Sample Size (n)</label>
+              <div class="range-wrap">
+                <input type="range" id="cltN" min="1" max="100" value="30" step="1">
+                <span class="range-val" id="cltNVal">30</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
+            <button class="btn btn-primary" id="cltDraw100">Draw 100 Samples</button>
+            <button class="btn btn-accent"  id="cltDraw1000">Draw 1000 Samples</button>
+            <button class="btn btn-outline btn-sm" id="cltReset">Reset</button>
+          </div>
+          <div id="cltSummary" class="result-box" style="margin-bottom:1rem;display:none"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div>
+              <p style="font-size:.85rem;font-weight:600;text-align:center;color:var(--muted)">Population Distribution</p>
+              <canvas id="popChart"></canvas>
+            </div>
+            <div>
+              <p style="font-size:.85rem;font-weight:600;text-align:center;color:var(--muted)">Distribution of Sample Means</p>
+              <canvas id="meansChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6.5 CI Calculator -->
+      <section class="section">
+        <h2>6.5 Confidence Interval Calculator</h2>
+        <div class="widget">
+          <div class="widget-title">📏 Confidence Interval for the Mean</div>
+          <div class="input-row">
+            <div class="form-group">
+              <label for="ciMean">Sample Mean (x̄)</label>
+              <input type="number" id="ciMean" class="form-control" value="120" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ciSD">Sample SD (s)</label>
+              <input type="number" id="ciSD" class="form-control" value="15" min="0.01" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ciN">Sample Size (n)</label>
+              <input type="number" id="ciN" class="form-control" value="30" min="2" step="1">
+            </div>
+            <div class="form-group">
+              <label for="ciConf">Confidence Level</label>
+              <select id="ciConf" class="form-control">
+                <option value="0.90">90%</option>
+                <option value="0.95" selected>95%</option>
+                <option value="0.99">99%</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="calcCI">Calculate CI</button>
+          <div id="ciResult" class="result-box" style="display:none;margin-top:1rem"></div>
+        </div>
+      </section>
+
+      <!-- Quiz -->
+      <section class="section">
+        <h2>6.6 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+          <div id="q1">
+            <p><strong>Q1.</strong> A population has mean = 50 and SD = 10. If we draw samples of n=100, what is the standard error of the mean?</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> 10</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> 1</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> 5</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> 0.1</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+          <div id="q2">
+            <p><strong>Q2.</strong> According to the CLT, as sample size increases, the sampling distribution of the mean becomes:</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> More skewed</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> More spread out</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> More approximately normal and narrower</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> Uniform</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter5.html">← Chapter 5: Distributions</a>
+        <a href="chapter7.html">Chapter 7: Hypothesis Testing →</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 6</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* Slider */
+  document.getElementById('cltN').addEventListener('input', function(){
+    document.getElementById('cltNVal').textContent = this.value;
+  });
+
+  /* ── CLT Simulation ── */
+  let allMeans = [];
+  let popChart = null, meansChart = null;
+
+  function generateObs(shape) {
+    switch(shape) {
+      case 'uniform': return Math.random() * 10;
+      case 'exponential': return -Math.log(Math.random()) * 2;
+      case 'bimodal': return Math.random() < 0.5
+        ? 2 + (Math.random()*2-1)
+        : 8 + (Math.random()*2-1);
+      default: {
+        const u1=Math.random(), u2=Math.random();
+        return 5 + 1.5 * Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);
+      }
+    }
+  }
+
+  function drawPopChart() {
+    const shape = document.getElementById('popShape').value;
+    const data = Array.from({length:2000}, () => generateObs(shape));
+    const mn = Math.min(...data), mx = Math.max(...data);
+    const bins = 20, bw = (mx-mn)/bins;
+    const counts = Array(bins).fill(0);
+    const labels = [];
+    for(let i=0;i<bins;i++){
+      const lo=mn+i*bw; labels.push(lo.toFixed(1));
+      data.forEach(v=>{ if(v>=lo&&(v<lo+bw||(i===bins-1&&v===mx))) counts[i]++; });
+    }
+    if(popChart) popChart.destroy();
+    popChart = new Chart(document.getElementById('popChart'),{
+      type:'bar',
+      data:{labels,datasets:[{label:'Population',data:counts,backgroundColor:'rgba(26,92,118,.6)',borderColor:'rgba(26,92,118,1)',borderWidth:1,borderRadius:2}]},
+      options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6}},y:{beginAtZero:true}}}
+    });
+  }
+
+  function drawMeans() {
+    if(!allMeans.length) return;
+    const mn=Math.min(...allMeans), mx=Math.max(...allMeans);
+    const bins=20, bw=(mx-mn)/bins||0.01;
+    const counts=Array(bins).fill(0), labels=[];
+    for(let i=0;i<bins;i++){
+      const lo=mn+i*bw; labels.push(lo.toFixed(2));
+      allMeans.forEach(v=>{ if(v>=lo&&(v<lo+bw||(i===bins-1&&v===mx))) counts[i]++; });
+    }
+    if(meansChart) meansChart.destroy();
+    meansChart = new Chart(document.getElementById('meansChart'),{
+      type:'bar',
+      data:{labels,datasets:[{label:'Sample Means',data:counts,backgroundColor:'rgba(26,188,156,.65)',borderColor:'rgba(23,165,137,1)',borderWidth:1,borderRadius:2}]},
+      options:{responsive:true,plugins:{legend:{display:false},title:{display:true,text:`${allMeans.length} samples, n=${document.getElementById('cltN').value}`}},scales:{x:{ticks:{maxTicksLimit:6}},y:{beginAtZero:true}}}
+    });
+    const m=Stats.mean(allMeans), s=Stats.sd(allMeans);
+    document.getElementById('cltSummary').style.display='block';
+    document.getElementById('cltSummary').innerHTML=
+      `Mean of sample means: <strong>${Stats.round(m,3)}</strong>&emsp;|&emsp;SD of sample means: <strong>${Stats.round(s,4)}</strong>`;
+  }
+
+  function runSamples(k){
+    const n=+document.getElementById('cltN').value;
+    const shape=document.getElementById('popShape').value;
+    for(let i=0;i<k;i++){
+      const sample=Array.from({length:n},()=>generateObs(shape));
+      allMeans.push(Stats.mean(sample));
+    }
+    drawMeans();
+  }
+
+  document.getElementById('cltDraw100').addEventListener('click',()=>runSamples(100));
+  document.getElementById('cltDraw1000').addEventListener('click',()=>runSamples(1000));
+  document.getElementById('cltReset').addEventListener('click',()=>{
+    allMeans=[];
+    if(meansChart){meansChart.destroy();meansChart=null;}
+    document.getElementById('cltSummary').style.display='none';
+    drawPopChart();
+  });
+  document.getElementById('popShape').addEventListener('change',()=>{
+    allMeans=[];
+    if(meansChart){meansChart.destroy();meansChart=null;}
+    document.getElementById('cltSummary').style.display='none';
+    drawPopChart();
+  });
+
+  drawPopChart();
+
+  /* ── CI Calculator ── */
+  document.getElementById('calcCI').addEventListener('click',()=>{
+    const xbar=+document.getElementById('ciMean').value;
+    const s=+document.getElementById('ciSD').value;
+    const n=+document.getElementById('ciN').value;
+    const conf=+document.getElementById('ciConf').value;
+    const alpha=1-conf;
+    const df=n-1;
+    // Find t* via normInv approximation for large df, else use table values
+    let tStar;
+    if(df>=120){ tStar=Stats.normInv(1-alpha/2); }
+    else {
+      // Newton-Raphson on tCDF
+      let t=Stats.normInv(1-alpha/2);
+      for(let i=0;i<50;i++){
+        const p=Stats.tCDF(t,df);
+        const err=(1-alpha/2)-p;
+        t+=err/Stats.normPDF(t)*Math.sqrt(1+t*t/df);
+      }
+      tStar=t;
+    }
+    const se=s/Math.sqrt(n);
+    const lo=xbar-tStar*se, hi=xbar+tStar*se;
+    const r=document.getElementById('ciResult');
+    r.style.display='block';
+    r.innerHTML=`
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Sample mean</td><td>${xbar}</td></tr>
+          <tr><td>SE</td><td>${Stats.round(se,4)}</td></tr>
+          <tr><td>df</td><td>${df}</td></tr>
+          <tr><td>t*</td><td>${Stats.round(tStar,4)}</td></tr>
+          <tr><td>${(conf*100).toFixed(0)}% CI</td><td><strong>(${Stats.round(lo,3)}, ${Stats.round(hi,3)})</strong></td></tr>
+        </tbody>
+      </table>`;
+  });
+
+  /* Quiz */
+  const answers={q1:'b',q2:'c'};
+  const exp={q1:'✅ Correct! SE = σ/√n = 10/√100 = 10/10 = <strong>1</strong>.', q2:'✅ Correct! The CLT says the distribution becomes <strong>more approximately normal and narrower</strong> (smaller SE).'};
+  const wrong={q1:'❌ SE = σ/√n = 10/√100 = 10/10 = 1.', q2:'❌ The CLT tells us the sampling distribution becomes <em>more approximately normal</em> and the spread (SE) decreases with n.'};
+  document.getElementById('checkQ').addEventListener('click',()=>{
+    ['q1','q2'].forEach(id=>{
+      const sel=document.querySelector(`input[name=${id}]:checked`);
+      const fb=document.getElementById(`${id}-fb`);
+      if(!sel){fb.innerHTML='Please select.';fb.className='quiz-feedback incorrect';return;}
+      const ok=sel.value===answers[id];
+      fb.innerHTML=ok?exp[id]:wrong[id];
+      fb.className='quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp=>{
+        inp.closest('.quiz-option').className='quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 10 – Correlation &amp; Regression</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 20h20M6 20V10l6-6 6 6v10M10 20v-5h4v5"/>
+        </svg>
+        BiostatTextbook
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="../index.html">Home</a>
+        <a href="chapter1.html">Chapters</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="chapter-wrapper">
+
+      <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li>Chapter 10</li>
+        <li>Correlation &amp; Regression</li>
+      </ul>
+
+      <div class="chapter-header">
+        <div class="chapter-tag">Chapter 10</div>
+        <h1>Correlation &amp; Simple Linear Regression</h1>
+        <p>Explore linear relationships between two continuous variables: measure their strength with correlation, and model them with regression.</p>
+      </div>
+
+      <!-- 10.1 -->
+      <section class="section">
+        <h2>10.1 Pearson Correlation Coefficient (r)</h2>
+        <p>Pearson's r quantifies the <strong>strength and direction</strong> of the linear relationship between two continuous variables.</p>
+        <div class="formula">r = Σ[(xᵢ−x̄)(yᵢ−ȳ)] / √[Σ(xᵢ−x̄)² × Σ(yᵢ−ȳ)²]</div>
+        <ul>
+          <li>r = +1: Perfect positive linear relationship</li>
+          <li>r = 0: No linear relationship</li>
+          <li>r = −1: Perfect negative linear relationship</li>
+        </ul>
+
+        <div class="table-wrap" style="margin-top:.75rem">
+          <table>
+            <thead><tr><th>|r| value</th><th>Interpretation</th></tr></thead>
+            <tbody>
+              <tr><td>0.00 – 0.10</td><td>Negligible</td></tr>
+              <tr><td>0.10 – 0.30</td><td>Weak</td></tr>
+              <tr><td>0.30 – 0.50</td><td>Moderate</td></tr>
+              <tr><td>0.50 – 0.70</td><td>Strong</td></tr>
+              <tr><td>0.70 – 1.00</td><td>Very strong</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning">
+          <strong>⚠️ Correlation ≠ Causation</strong>
+          A strong correlation does not imply that X causes Y. A third (confounding) variable may explain both.
+        </div>
+      </section>
+
+      <!-- 10.2 -->
+      <section class="section">
+        <h2>10.2 Simple Linear Regression</h2>
+        <p>Regression models the relationship between a <strong>predictor (X)</strong> and a <strong>continuous outcome (Y)</strong>:</p>
+        <div class="formula">Ŷ = b₀ + b₁X</div>
+        <ul>
+          <li><strong>b₀</strong> (intercept): expected Y when X = 0</li>
+          <li><strong>b₁</strong> (slope): change in Y for a one-unit increase in X</li>
+        </ul>
+
+        <h3>Estimating the Slope and Intercept (Least Squares)</h3>
+        <div class="formula">b₁ = Σ[(xᵢ−x̄)(yᵢ−ȳ)] / Σ(xᵢ−x̄)²</div>
+        <div class="formula">b₀ = ȳ − b₁x̄</div>
+
+        <h3>Goodness of Fit: R²</h3>
+        <p>R² (coefficient of determination) is the proportion of variance in Y explained by X:</p>
+        <div class="formula">R² = 1 − (SSresidual / SStotal)</div>
+        <p>R² = r² for simple linear regression. R² = 0.7 means the model explains 70% of variance in Y.</p>
+      </section>
+
+      <!-- 10.3 Interactive -->
+      <section class="section">
+        <h2>10.3 Interactive: Scatter Plot &amp; Regression Explorer</h2>
+        <p>Enter pairs of X and Y values (one pair per line or comma-separated rows), or click the canvas to add points interactively.</p>
+
+        <div class="widget">
+          <div class="widget-title">📈 Regression Explorer</div>
+
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
+            <div style="flex:1;min-width:220px">
+              <div class="form-group">
+                <label for="xyData">X, Y data (one pair per line)</label>
+                <textarea id="xyData" class="form-control" rows="8" placeholder="25, 140&#10;30, 150&#10;35, 155&#10;40, 160&#10;45, 165"></textarea>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                <button class="btn btn-primary btn-sm" id="plotRegression">Plot &amp; Analyse</button>
+                <button class="btn btn-outline btn-sm" id="loadRegExample">Load Example</button>
+                <button class="btn btn-outline btn-sm" id="clearRegression">Clear</button>
+              </div>
+            </div>
+            <div style="flex:2;min-width:300px">
+              <div class="chart-container" style="max-width:100%;position:relative;cursor:crosshair">
+                <canvas id="regChart"></canvas>
+              </div>
+              <p style="font-size:.78rem;color:var(--muted);text-align:center;margin-top:.3rem">Click on the chart to add data points interactively</p>
+            </div>
+          </div>
+
+          <div id="regResult" class="result-box" style="display:none;margin-top:1rem"></div>
+          <div id="regError"  class="callout callout-danger" style="display:none;margin-top:.75rem"></div>
+        </div>
+      </section>
+
+      <!-- 10.4 Assumptions -->
+      <section class="section">
+        <h2>10.4 Assumptions of Linear Regression</h2>
+        <ul>
+          <li><strong>Linearity:</strong> The relationship between X and Y is linear.</li>
+          <li><strong>Independence:</strong> Observations are independent.</li>
+          <li><strong>Homoscedasticity:</strong> Residuals have constant variance across all fitted values.</li>
+          <li><strong>Normality of residuals:</strong> Residuals are approximately normally distributed (important for inference in small samples).</li>
+          <li><strong>No influential outliers</strong> that excessively distort the line.</li>
+        </ul>
+      </section>
+
+      <!-- Quiz -->
+      <section class="section">
+        <h2>10.5 Check Your Understanding</h2>
+        <div class="widget">
+          <div class="widget-title">✅ Quick Quiz</div>
+          <div id="q1">
+            <p><strong>Q1.</strong> A regression model for BMI vs. fasting glucose has b₁ = 2.3. This means:</p>
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> For each 1 mmol/L increase in glucose, BMI increases by 2.3</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> For each 1 kg/m² increase in BMI, glucose increases by 2.3 mmol/L</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> BMI and glucose are perfectly correlated</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> The R² is 2.3</label>
+            <div class="quiz-feedback" id="q1-fb"></div>
+          </div>
+          <hr style="margin:1.2rem 0;border:none;border-top:1px solid var(--border)">
+          <div id="q2">
+            <p><strong>Q2.</strong> R² = 0.64 for a regression of cholesterol on age. What does this mean?</p>
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> r = 0.64</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> 64% of the variance in cholesterol is explained by age</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> The p-value is 0.36</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> There is a negative relationship</label>
+            <div class="quiz-feedback" id="q2-fb"></div>
+          </div>
+          <button class="btn btn-primary" id="checkQ" style="margin-top:1.2rem">Check Answers</button>
+        </div>
+      </section>
+
+      <nav class="chapter-nav">
+        <a href="chapter9.html">← Chapter 9: Chi-Square Tests</a>
+        <a href="../index.html">← Back to All Chapters</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer"><p>Interactive Biostatistics Textbook &bull; Chapter 10</p></footer>
+</div>
+
+<script src="../js/stats.js"></script>
+<script>
+  document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('siteNav').classList.toggle('open'));
+
+  /* ── Regression Explorer ── */
+  let regChart = null;
+  let clickPoints = [];
+
+  const EXAMPLE_DATA = `25, 140\n30, 148\n35, 155\n40, 162\n45, 168\n28, 143\n33, 152\n38, 158\n42, 165\n50, 175\n22, 136\n48, 172`;
+
+  function parseXY(text) {
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    const xs=[], ys=[];
+    for (const line of lines) {
+      const parts = line.split(/[\s,;]+/).map(Number).filter(v => !isNaN(v));
+      if (parts.length >= 2) { xs.push(parts[0]); ys.push(parts[1]); }
+    }
+    return {xs, ys};
+  }
+
+  function renderRegression(xs, ys) {
+    const err = document.getElementById('regError');
+    const res = document.getElementById('regResult');
+    err.style.display = 'none';
+    res.style.display = 'none';
+
+    if (xs.length < 3) {
+      err.textContent = 'Please enter at least 3 data pairs.';
+      err.style.display = 'block';
+      if (regChart) { regChart.destroy(); regChart = null; }
+      return;
+    }
+
+    const reg = Stats.linearRegression(xs, ys);
+    const r   = Stats.pearsonR(xs, ys);
+    const n   = xs.length;
+
+    // t-test for slope
+    const tStat = r * Math.sqrt((n-2)/(1-r*r));
+    const pVal  = Stats.tPValue(tStat, n-2);
+
+    // Regression line
+    const xMin = Math.min(...xs), xMax = Math.max(...xs);
+    const regLine = [{x:xMin, y:reg.intercept+reg.slope*xMin},{x:xMax,y:reg.intercept+reg.slope*xMax}];
+
+    const scatter = xs.map((x,i) => ({x,y:ys[i]}));
+
+    if (regChart) regChart.destroy();
+    regChart = new Chart(document.getElementById('regChart'), {
+      type: 'scatter',
+      data: {
+        datasets: [
+          { label:'Data', data:scatter, backgroundColor:'rgba(26,92,118,.7)', borderColor:'rgba(26,92,118,1)', pointRadius:6 },
+          { label:'Regression line', data:regLine, type:'line', borderColor:'rgba(231,76,60,.9)', backgroundColor:'transparent', pointRadius:0, borderWidth:2 }
+        ]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{display:true}, title:{display:true,text:`Ŷ = ${Stats.round(reg.intercept,3)} + ${Stats.round(reg.slope,3)}X`} },
+        scales:{
+          x:{title:{display:true,text:'X'}},
+          y:{title:{display:true,text:'Y'}}
+        },
+        onClick: (event, _, chart) => {
+          const canvasPos = Chart.helpers.getRelativePosition(event, chart);
+          const dataX = chart.scales.x.getValueForPixel(canvasPos.x);
+          const dataY = chart.scales.y.getValueForPixel(canvasPos.y);
+          clickPoints.push({x:dataX, y:dataY});
+          const allXs = [...xs, ...clickPoints.map(p=>p.x)];
+          const allYs = [...ys, ...clickPoints.map(p=>p.y)];
+          renderRegression(allXs, allYs);
+        }
+      }
+    });
+
+    res.style.display = 'block';
+    res.innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>Statistic</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>n</td><td>${n}</td></tr>
+          <tr><td>Pearson r</td><td>${Stats.round(r,4)}</td></tr>
+          <tr><td>R²</td><td>${Stats.round(reg.r2,4)}</td></tr>
+          <tr><td>Intercept (b₀)</td><td>${Stats.round(reg.intercept,4)}</td></tr>
+          <tr><td>Slope (b₁)</td><td>${Stats.round(reg.slope,4)}</td></tr>
+          <tr><td>t statistic (slope)</td><td>${Stats.round(tStat,4)}</td></tr>
+          <tr><td>p-value (slope)</td><td>${Stats.pValueLabel(pVal)}</td></tr>
+        </tbody>
+      </table></div>`;
+  }
+
+  document.getElementById('plotRegression').addEventListener('click', () => {
+    clickPoints = [];
+    const {xs,ys} = parseXY(document.getElementById('xyData').value);
+    renderRegression(xs, ys);
+  });
+
+  document.getElementById('loadRegExample').addEventListener('click', () => {
+    document.getElementById('xyData').value = EXAMPLE_DATA;
+    clickPoints = [];
+    const {xs,ys} = parseXY(EXAMPLE_DATA);
+    renderRegression(xs, ys);
+  });
+
+  document.getElementById('clearRegression').addEventListener('click', () => {
+    document.getElementById('xyData').value = '';
+    clickPoints = [];
+    if (regChart) { regChart.destroy(); regChart = null; }
+    document.getElementById('regResult').style.display = 'none';
+    document.getElementById('regError').style.display  = 'none';
+    // Blank chart placeholder
+    regChart = new Chart(document.getElementById('regChart'), {
+      type:'scatter',data:{datasets:[]},
+      options:{responsive:true,plugins:{title:{display:true,text:'Click to add points, or enter data on the left'}}}
+    });
+  });
+
+  // Initial blank chart
+  regChart = new Chart(document.getElementById('regChart'), {
+    type:'scatter',data:{datasets:[]},
+    options:{
+      responsive:true,
+      plugins:{title:{display:true,text:'Enter data or click "Load Example" to begin'}},
+      scales:{x:{title:{display:true,text:'X'}},y:{title:{display:true,text:'Y'}}}
+    }
+  });
+
+  /* Quiz */
+  const answers={q1:'b',q2:'b'};
+  const exp={
+    q1:'✅ Correct! b₁ = 2.3 means for each 1 unit increase in the <em>predictor</em> (BMI), the <em>outcome</em> (glucose) increases by 2.3.',
+    q2:'✅ Correct! R² = 0.64 means <strong>64%</strong> of the variance in cholesterol is explained by age.'
+  };
+  const wrong={
+    q1:'❌ b₁ is the slope — for each 1-unit increase in X (BMI), Y (glucose) changes by b₁ = 2.3.',
+    q2:'❌ R² represents the <em>proportion of variance explained</em>. R² = 0.64 → 64% variance explained.'
+  };
+  document.getElementById('checkQ').addEventListener('click',()=>{
+    ['q1','q2'].forEach(id=>{
+      const sel=document.querySelector(`input[name=${id}]:checked`);
+      const fb=document.getElementById(`${id}-fb`);
+      if(!sel){fb.innerHTML='Please select.';fb.className='quiz-feedback incorrect';return;}
+      const ok=sel.value===answers[id];
+      fb.innerHTML=ok?exp[id]:wrong[id];
+      fb.className='quiz-feedback '+(ok?'correct':'incorrect');
+      document.querySelectorAll(`input[name=${id}]`).forEach(inp=>{
+        inp.closest('.quiz-option').className='quiz-option '+(inp.value===answers[id]?'correct':(inp.checked?'incorrect':''));
+      });
+    });
+  });
+</script>
+</body>
+</html>
